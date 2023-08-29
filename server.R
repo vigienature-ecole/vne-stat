@@ -25,7 +25,7 @@ function(input, output, session) {
   
   # init module
   mod_login_server("login", parent_session = session)
-  # mod_network_server("reseaux", parent_session = session)
+  mod_network_server("reseaux", parent_session = session)
   
   # hide elements when app starts
   hide("start_data")

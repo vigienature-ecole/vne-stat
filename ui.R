@@ -121,13 +121,13 @@ fluidPage(
              actionButton("new_analysis_bottom", "Lancer une nouvelle analyse", 
                           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
              HTML("<br><br>")
-    )#,
-    # tabPanel("Réseaux", value = "reseau",
-    #          actionButton("new_analysis_top_network", "Lancer une nouvelle analyse", 
-    #                       style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
-    #          HTML("<br><br>"),
-    #          mod_network_ui("reseaux")
-    #          )
+    ),
+    tabPanel("Réseaux", value = "reseau",
+             actionButton("new_analysis_top_network", "Lancer une nouvelle analyse",
+                          style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
+             HTML("<br><br>"),
+             mod_network_ui("reseaux")
+             )
   )
 )
 
