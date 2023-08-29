@@ -3,7 +3,7 @@ ids,type,with_variable,oiseaux,vdt,escargots,spipoll,sauvages,biolit,variable_ty
 2,data,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,NA,NA,NA,escargots,Opération escargots,Ce jeu de données contient des données sur les escargots et les limaces et leur environnement collectées avec le protocole Opération Escargots.
 3,variable,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,quali,value,TRUE,Departement,Département,
 ,variable,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,quali,value,TRUE,Region,Région,
-,variable,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,quali,value,TRUE,Academie,Académie,
+,variable,FALSE,TRUE,TRUE,TRUE,FALSE,TRUE,TRUE,quali,value,TRUE,Academie,Académie,
 4,variable,FALSE,TRUE,FALSE,TRUE,FALSE,FALSE,FALSE,quali,name,FALSE,Distance_champ,Distance à un champs,
 5,variable,FALSE,TRUE,FALSE,TRUE,FALSE,FALSE,FALSE,quali,name,FALSE,Distance_prairie,Distance à une prairie,
 6,variable,FALSE,TRUE,FALSE,TRUE,FALSE,FALSE,FALSE,quali,name,FALSE,Distance_bois,Distance à un bois,
@@ -34,7 +34,7 @@ ids,type,with_variable,oiseaux,vdt,escargots,spipoll,sauvages,biolit,variable_ty
 32,variable,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,quanti_points,name,FALSE,Latitude_debut,Latitude,
 ,variable,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,quali,value,FALSE,Plante,Plante,
 ,variable,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,quali,name,FALSE,Fleur_ombragee,Fleur à l’ombre,
-,variable,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,quanti_points,name,FALSE,Distance_ruche,Distance à une ruche,
+,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,quanti_points,name,FALSE,Distance_ruche,Distance à une ruche,
 ,variable,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,quali,name,FALSE,Type_plante,Type de plante,
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,quali,name,FALSE,Bord_eau,Milieu bord d’eau,
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,quali,name,FALSE,Bord_route,Milieu bord de route,
