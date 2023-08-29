@@ -102,7 +102,7 @@ fluidPage(
                         ),
                         bsCollapsePanel(
                           title = "Manipulation", DT::dataTableOutput("manip_output"),
-                          htmlOutput("error_manip") |> 
+                          htmlOutput("error_manip") %>% 
                             tagAppendAttributes(style = 'color:green;font-weight: bolder;')
                         ),
                         bsCollapsePanel(
@@ -110,11 +110,11 @@ fluidPage(
                           htmlOutput("graph_info"),
                           plotOutput("visu_graph_output"),
                           DT::dataTableOutput("visu_table_output"),
-                          htmlOutput("error_map") |> 
+                          htmlOutput("error_map") %>% 
                             tagAppendAttributes(style = 'color:red;font-weight: bolder;'),
-                          htmlOutput("error_vis") |> 
+                          htmlOutput("error_vis") %>% 
                             tagAppendAttributes(style = 'color:green;font-weight: bolder;'),
-                          htmlOutput("help_vis_out") |> 
+                          htmlOutput("help_vis_out") %>% 
                             tagAppendAttributes(style = 'color:green;font-weight: bolder;')
                         )
              ),
