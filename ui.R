@@ -59,7 +59,6 @@ fluidPage(
         )
       ),
       column(
-        h3("Paramètres de la représentation du réseau"),
         style='min-height:500px; border: 10px solid white; padding: 10px; border-radius: 20px; background: #DDEDDD', width = 4, align="center",
         h2("Étape 2"),
         h3("Manipuler les données"),

@@ -9,6 +9,7 @@ mod_network_ui <- function(id) {
   tagList(
     column(
       style='min-height:500px; border: 10px solid white; padding: 10px; border-radius: 20px; background: #DDEDDD', width = 4, align="center",
+      h3("Paramètres de la représentation du réseau"),
       selectInput(ns("taxon_depth_insect"), "Niveau taxonomique des insectes (et autres organismes floricoles)", choices = setNames(c("Ordre", "Espece"), c("Ordres d'insecte", "Espèces d'insecte"))),
       selectInput(ns("taxon_depth_plant"), "Niveau taxonomique des plantes", choices = setNames(c("Famille_plante", "Plante"), c("Familles de plante", "Espèces de plante"))),
       selectizeInput(ns("taxon_select_insect"), "Sélectionner des insectes (au moins deux)", choices = "", multiple = TRUE, options = NULL),
