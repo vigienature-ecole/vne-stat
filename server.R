@@ -231,6 +231,11 @@ function(input, output, session) {
     app_values$return_to_input <- TRUE
   })
   
+  observeEvent(input$new_analysis_top_network, {
+    app_values$return_to_input <- TRUE
+  })
+  
+  
   observeEvent(input$new_analysis_top, {
     app_values$return_to_input <- TRUE
   })
