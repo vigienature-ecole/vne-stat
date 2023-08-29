@@ -34,11 +34,11 @@ fluidPage(
   navbarPage(
     tags$head(tags$style(type = 'text/css','.navbar{display:none;}')),
     id = "vne_stats",
-    tabPanel(
-      title = "Connexion à Vigie-Nature École Stats",
-      value = "login",
-      mod_login_ui("login")
-    ),
+    # tabPanel(
+    #   title = "Connexion à Vigie-Nature École Stats",
+    #   value = "login",
+    #   mod_login_ui("login")
+    # ),
     tabPanel(
       title = "Lancer une analyse de données",  
       value = "input",
