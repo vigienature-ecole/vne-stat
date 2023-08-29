@@ -15,7 +15,7 @@ library(shinyWidgets)
 
 
 #import module and fonctions
-lapply(file.path("R", dir("R")), source)
+# lapply(file.path("R", dir("R")), source)
 
 # Define UI for application that draws a histogram
 fluidPage(
