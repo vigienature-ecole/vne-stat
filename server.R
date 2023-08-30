@@ -34,7 +34,6 @@ function(input, output, session) {
   hide("variable_filter")
   hide("variable_level")
   hide("species_filter")
-  hide("species_filter")
   hide("start_manip")
   hide("visualize")
   hide("start_visu")
@@ -113,7 +112,7 @@ function(input, output, session) {
     
     if(input$manipulate == "abondance"){
       show("species_filter")
-      updateSelectInput(session, "species_filter", choices = c("Choisir une variable", unique(app_values$current_dataset$Espece)))
+      updateSelectInput(session, "species_filter", choices = c("Choisir une espèce", sort(unique(app_values$current_dataset$Espece))))
     } else {
       hide("species_filter")
     }
@@ -195,7 +194,13 @@ function(input, output, session) {
       app_values$current_dataset <- data_values[[input$import]]
       
       if(input$manipulate == "abondance" | input$manipulate == "diversite" | input$manipulate == "nombre_obs"){
-        results_manip <- calculate_indices(data = app_values$current_dataset, index = input$manipulate, variable_group = input$variable_group)
+        if (input$manipulate == "abondance" & input$species_filter != "Choisir une espèce"){
+          current_dataset <- app_values$current_dataset[Espece == input$species_filter]
+        } else {
+          current_dataset <- app_values$current_dataset[]
+        }
+        
+        results_manip <- calculate_indices(data = current_dataset, index = input$manipulate, variable_group = input$variable_group)
         
         app_values$result_manip <- results_manip[["result_manip"]]
         app_values$result_manip_view <- results_manip[["view"]]
