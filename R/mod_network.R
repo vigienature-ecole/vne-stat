@@ -32,8 +32,10 @@ mod_network_ui <- function(id) {
     ),
     column( width = 8,
             plotOutput(ns("interaction_plot")),
+            div(style = "height:300px"),
             uiOutput(ns("boxes_insects")),
             uiOutput(ns("boxes_plants"))
+            
     )
   )
 }
@@ -194,17 +196,18 @@ mod_network_server <- function(id, parent_session){
         #              MinWidth = 5,
         #              Pad=5)
         bipartite::plotweb(interaction_matrix,
-                           text.rot=45,
+                           text.rot = 90,
                            adj.high = 0,
                            adj.low = 1,
                            labsize = 1.7,
                            col.high = col_plant,
                            col.low = col_insect,
-                           y.lim=c(-1,3))
+                           y.lim=c(-3,3))
       }
-      
-      
-      
+    }, height = 900)
+    
+    
+    observeEvent(input$view_network, {
       output$boxes_insects <- renderUI({
         if(!is.null(mod_values$current_filtered_taxon_network)){
           interaction_limited <- filtered_network_max_interactions()
@@ -232,7 +235,7 @@ mod_network_server <- function(id, parent_session){
       output$boxes_plants <- renderUI({
         if(!is.null(mod_values$current_filtered_taxon_network)){
           interaction_limited <- filtered_network_max_interactions()
-
+          
           plant_images <- mod_values$plant_images
           taxo_level <- input$taxon_depth_plant
           
@@ -253,6 +256,8 @@ mod_network_server <- function(id, parent_session){
           })
         }
       })
+      
+      
       
       
       
