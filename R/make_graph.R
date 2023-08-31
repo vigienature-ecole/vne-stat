@@ -1,5 +1,5 @@
 make_graph <- function(data_to_plot, variable_group, variable_info, current_dataset_name, index_type){
-
+  
   # get variable information
   library(ggplot2)
   #mettre en place le titre de l'axe des x
@@ -7,12 +7,19 @@ make_graph <- function(data_to_plot, variable_group, variable_info, current_data
     y_label = "Nombre moyen\nd'individus"
   } else if (index_type == "diversite") {
     y_label = "Nombre moyen\nd'espèces"
+  } else if (index_type == "nombre_especes") {
+    y_label = "Nombre\nd'observation où\nl'espèce est présente"
+    variable_group = "Espece"
+    variable_info <- data.frame(
+      variable_order = "value", 
+      label = "Espèce",
+      variable_type  = "quali")
   } else {
     y_label = "Nombre\nd'observation"
   }
   
   # Filtrer les données manquantes ----
-
+  
   if(variable_group != "Choisir une variable"){
     lenght_data <- nrow(data_to_plot)
     data_to_plot <- data_to_plot[data_to_plot[[variable_group]] !=  "07_non communiqué", ]
@@ -23,7 +30,7 @@ make_graph <- function(data_to_plot, variable_group, variable_info, current_data
     
     # Gestion des variables ----
     
-
+    
     ## Gestion des mois ----
     if (variable_group == "Mois") {
       data_to_plot$Mois <- label_mounth(data_to_plot$Mois, short = TRUE, numbered_school_year = TRUE)
@@ -35,7 +42,7 @@ make_graph <- function(data_to_plot, variable_group, variable_info, current_data
     }
     
     #limitation du nombre de catégories
-  
+    
     if (variable_info$variable_type  == "quali" & nrow(data_to_plot) > 30){
       data_to_plot <- data_to_plot[order(-index)][1:30]
     }
@@ -68,7 +75,7 @@ make_graph <- function(data_to_plot, variable_group, variable_info, current_data
   }
   
   ## Choix du type de graphique ----
-
+  
   if(variable_group != "Choisir une variable"){
     if (variable_info$variable_type == "quali"){
       graph <- graph + 
@@ -121,8 +128,8 @@ make_graph <- function(data_to_plot, variable_group, variable_info, current_data
   
   if(variable_group == "Choisir une variable"){
     graph <- graph + ggplot2::theme(strip.text.x = element_blank(),
-                           axis.title.x = element_blank(),
-                           axis.text.x = element_blank())
+                                    axis.title.x = element_blank(),
+                                    axis.text.x = element_blank())
     
   } else {
     # rotate long labels

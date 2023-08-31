@@ -135,7 +135,7 @@ function(input, output, session) {
       if(input$variable_filter %in% unique(app_values$current_dataset[,..input$variable_filter])){
         show("variable_level")
         output$help_level <- renderText("Maintenant que vous avez choisi la variable à utiliser, il vous faut choisir la valeur de cette variable pour laquelle le tri sera effectué")
-        updateSelectInput(session, "variable_level", choices = c("Choisir une variable", unique(app_values$current_dataset[[input$variable_filter]])))
+        updateSelectInput(session, "variable_level", choices = c("Choisir une valeur", unique(app_values$current_dataset[[input$variable_filter]])))
       } else {
         hide("variable_level")
         output$help_level <- NULL
@@ -193,11 +193,27 @@ function(input, output, session) {
       # raw data
       app_values$current_dataset <- data_values[[input$import]]
       
-      if(input$manipulate == "abondance" | input$manipulate == "diversite" | input$manipulate == "nombre_obs"){
-        if (input$manipulate == "abondance" & input$species_filter != "Choisir une espèce"){
-          current_dataset <- app_values$current_dataset[Espece == input$species_filter]
+      # data wrandling
+      if (input$variable_filter != "Choisir une variable"){
+        if(input$variable_level != "Choisir une valeur"){
+          values_to_filter <- app_values$current_dataset[[input[["variable_filter"]]]] == input$variable_level
+          current_dataset <- app_values$current_dataset[values_to_filter, ]
         } else {
-          current_dataset <- app_values$current_dataset[]
+          # add error !!!!!
+        }
+      } else {
+        current_dataset <- app_values$current_dataset
+      }
+      
+      # filter dataset
+      
+      if(input$manipulate == "abondance" | input$manipulate == "diversite" | input$manipulate == "nombre_obs"){
+        
+        
+        if (input$manipulate == "abondance" & input$species_filter != "Choisir une espèce"){
+          current_dataset <- current_dataset[Espece == input$species_filter]
+        } else {
+          current_dataset <- current_dataset
         }
         
         results_manip <- calculate_indices(data = current_dataset, index = input$manipulate, variable_group = input$variable_group)
@@ -206,6 +222,11 @@ function(input, output, session) {
         app_values$result_manip_view <- results_manip[["view"]]
         
       } else if(input$manipulate == "nombre_especes"){
+        results_manip = current_dataset[ , .(index = length(Nombre_individus[Nombre_individus > 0])),
+                                   by = Espece]
+               
+        app_values$result_manip <- results_manip
+        app_values$result_manip_view <- results_manip
         
       } else if(input$manipulate == "reseau"){
         
@@ -220,13 +241,14 @@ function(input, output, session) {
       
       # Visualisation ----
       if(input$visualize == "graphique") {
+
         graph <- make_graph(
           data_to_plot = app_values$result_manip,
           variable_group = input$variable_group,
           variable_info = app_config[valeur == input$variable_group],
           current_dataset_name = input$import,
           index_type = input$manipulate)
-        output$visu_graph_output <- renderPlot(graph)
+        output$visu_graph_output <- renderPlot({graph}, height = 500,)
       }
     }
   })
