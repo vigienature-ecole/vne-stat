@@ -117,7 +117,7 @@ function(input, output, session) {
       hide("species_filter")
     }
     
-    if(input$manipulate == "nombre_especes"){
+    if(input$manipulate %in% c("diversite", "nombre_obs", "abondance", "nombre_especes")){
       show("variable_filter")
       updateSelectInput(session, "variable_filter", choices = c("Choisir une variable", sort(colnames(app_values$current_dataset))))
     } else {
@@ -222,6 +222,12 @@ function(input, output, session) {
         app_values$result_manip_view <- results_manip[["view"]]
         
       } else if(input$manipulate == "nombre_especes"){
+        browser()
+        
+        if (input$import == "sauvages"){
+          current_dataset$Nombre_individus <- 1
+        }
+        
         results_manip = current_dataset[ , .(index = length(Nombre_individus[Nombre_individus > 0])),
                                    by = Espece]
                
