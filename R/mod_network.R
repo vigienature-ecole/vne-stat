@@ -175,12 +175,14 @@ mod_network_server <- function(id, parent_session){
         
         # Classic palette BuPu, with 4 colors
         col_plant <- brewer.pal(4, "PuOr") 
+        col_plant <- c('#8E0152','#C51B7D','#DE77AE','#F1B6DA','#FDE0EF','#F7F7F7','#E6F5D0','#B8E186','#7FBC41','#4D9221','#276419')
         
         # Add more colors to this palette :
         col_plant <- colorRampPalette(col_plant)(ncol(interaction_matrix))
         
         # Classic palette BuPu, with 4 colors
         col_insect <- brewer.pal(4, "BrBG") 
+        col_insect <- c('#7F3B08','#B35806','#E08214','#FDB863','#FEE0B6','#F7F7F7','#D8DAEB','#B2ABD2','#8073AC','#542788','#2D004B')
         
         # Add more colors to this palette :
         col_insect <- colorRampPalette(col_insect)(nrow(interaction_matrix))
