@@ -127,7 +127,13 @@ fluidPage(
                           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
              HTML("<br><br>"),
              mod_network_ui("reseaux")
-             )
+             ),
+    tabPanel("Carte oiseaux", value = "map_birds",
+             actionButton("new_analysis_top_map_birds", "Lancer une nouvelle analyse",
+                          style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
+             HTML("<br><br>"),
+             mod_map_birds_ui("map_birds")
+    )
   )
 )
 

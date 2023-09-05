@@ -26,6 +26,7 @@ function(input, output, session) {
   # init module
   mod_login_server("login", parent_session = session)
   mod_network_server("reseaux", parent_session = session)
+  mod_map_birds_server("map_birds", parent_session = session)
   
   # hide elements when app starts
   hide("start_data")
@@ -171,9 +172,12 @@ function(input, output, session) {
   
   observeEvent(input$start_visu, {
     cat("View viz result\n")
-    if(input$manipulate == "reseau"){
+    if(input$manipulate == "reseau") {
       updateTabsetPanel(session, "vne_stats",
                         selected = "reseau")
+    } else if(input$manipulate == "map_birds") {
+      updateTabsetPanel(session, "vne_stats",
+                        selected = "map_birds")
     } else {
       app_values$start_analysis <- TRUE
       app_values$open_panel <- "Visualisation"
