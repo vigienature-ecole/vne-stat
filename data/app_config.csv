@@ -8,7 +8,7 @@ ids,type,with_variable,oiseaux,vdt,escargots,spipoll,sauvages,biolit,variable_ty
 5,variable,FALSE,TRUE,FALSE,TRUE,FALSE,FALSE,FALSE,quali,name,FALSE,Distance_prairie,Distance à une prairie,
 6,variable,FALSE,TRUE,FALSE,TRUE,FALSE,FALSE,FALSE,quali,name,FALSE,Distance_bois,Distance à un bois,
 7,variable,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,quali,name,FALSE,Type_de_milieu,Type de milieu,
-8,visualisation,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,NA,NA,NA,top,Réaliser un tableau ordonné,Cette option permet de classer par ordre décroissant le résultat d’un calcul. 
+8,visualisation_old,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,NA,NA,NA,top,Réaliser un tableau ordonné,Cette option permet de classer par ordre décroissant le résultat d’un calcul. 
 11,data,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,NA,NA,NA,oiseaux,Oiseaux des jardins,Ce jeu de données contient des données sur les oiseaux et leur environnement collectées avec le protocole Oiseaux des jardins.
 12,operation,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,NA,NA,NA,diversite,Nombre moyen d'espèces,Cette option calcule la somme du nombre d’espèces vues pour chaque observation puis réalise une moyenne (par catégorie si un jeton est placé). 
 13,operation,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,TRUE,NA,NA,NA,abondance,Nombre moyen d'individus,Cette option additionne le nombre d’individus pour chaque observation puis réalise une moyenne (par catégorie si un jeton est placé). 
@@ -16,7 +16,7 @@ ids,type,with_variable,oiseaux,vdt,escargots,spipoll,sauvages,biolit,variable_ty
 15,variable,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,quanti_line,mois,FALSE,Mois,Mois,
 16,visualisation,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,NA,NA,NA,graphique,Réaliser un graphique,Cette option permet de réaliser un graphique à partir de vos calculs.
 17,variable,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,quanti_line,name,FALSE,Annee,Année,
-21,visualisation,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,NA,NA,NA,carte,Réaliser une carte,Cette option permet de placer vos données sur une carte. 
+21,visualisation_old,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,NA,NA,NA,carte,Réaliser une carte,Cette option permet de placer vos données sur une carte. 
 30,variable,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,quali,name,FALSE,Humidite_sol_lors_observation,Humidité du sol,
 31,variable,FALSE,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,quanti_points,name,FALSE,Longitude,Longitude,
 32,variable,FALSE,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,quanti_points,name,FALSE,Latitude,Latitude,
@@ -74,3 +74,4 @@ ids,type,with_variable,oiseaux,vdt,escargots,spipoll,sauvages,biolit,variable_ty
 ,variable,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,quanti_line,name,FALSE,Heure,Heure de la session d’observation,
 ,variable,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,quali,name,FALSE,Famille_plante,Famille de la plante,
 ,variable,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,quali,name,FALSE,Pollinisation_plante,Type de pollinisation de la plante,
+,operation,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,TRUE,NA,NA,NA,map_birds,Étudier la répartition des espèces,
