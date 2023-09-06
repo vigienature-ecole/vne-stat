@@ -82,7 +82,6 @@ fluidPage(
         h2("Étape 3"),
         h3("Visualiser les données"),
         helpText("Cette étape permet de représenter les données de façon à conclure. Il est possible de faire des graphiques, des cartes ou des tableaux ordonnées."),
-        selectInput("visualize", "Sélectionner le type de visualisation", "Choisir un type de visualisation", selected = "Choisir un type de visualisation"),
         htmlOutput("help_visu_ui"),
         actionButton("start_visu", "Visualiser les données", 
                      style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%")
@@ -108,9 +107,6 @@ fluidPage(
                           title = "Visualisation", 
                           htmlOutput("graph_info"),
                           plotOutput("visu_graph_output"),
-                          DT::dataTableOutput("visu_table_output"),
-                          htmlOutput("error_map") %>% 
-                            tagAppendAttributes(style = 'color:red;font-weight: bolder;'),
                           htmlOutput("error_vis") %>% 
                             tagAppendAttributes(style = 'color:green;font-weight: bolder;'),
                           htmlOutput("help_vis_out") %>% 

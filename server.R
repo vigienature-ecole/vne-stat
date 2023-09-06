@@ -86,18 +86,26 @@ function(input, output, session) {
   # calculate on click
   observeEvent(input$manipulate, {
     cat("Choose operation :\n")
+    if (input$manipulate != "Choisir une opération" ){
+      show("visualize")
+      show("start_manip")
+      show("start_visu")
+    } else {
+      hide("visualize")
+      hide("start_manip")
+      hide("start_visu")
+    }
+
     
     if(input$manipulate != "Choisir une opération" & input$manipulate != "reseau"){ 
-      show("visualize")
+      
       current_dataset_name = input$import
       visualisation_information <- app_config[app_config$type == "visualisation" & app_config[[current_dataset_name]]]
       
       updateSelectInput(session, "visualize", choices = c("Choisir un type de visualisation", setNames(visualisation_information$valeur, 
                                                                                                        visualisation_information$label)))
       show("start_manip")
-    } else {
-      hide("visualize")
-      hide("start_manip")
+      show("start_visu")
     }
     
     if(input$manipulate %in% c("diversite", "nombre_obs", "abondance")){ 
@@ -124,10 +132,16 @@ function(input, output, session) {
     } else {
       hide("variable_filter")
     }
-    
+new_analysis_top_map_birds
     if(input$manipulate == "reseau") {
       show("start_visu")
-      output$help_manip <- renderText("Le résultat de l'outil de visualisation de réseaux n'est disponible que dans l'onglet visualisation")
+      output$ <- renderText("Le résultat de l'outil de visualisation de réseaux n'est disponible que dans l'onglet visualisation")
+    } else if (input$manipulate == "map_birds"){
+      show("start_visu")
+      hide("start_manip")
+      output$ <- renderText("Le résultat de l'outil de visualisation de carte n'est disponible que dans l'onglet visualisation")
+    } else {
+      output$help_manip <- NULL
     }
   })
   
@@ -141,18 +155,6 @@ function(input, output, session) {
         hide("variable_level")
         output$help_level <- NULL
       }
-    }
-  })
-  
-  # when visualisation is selected ----
-  # show button to access to result (visu)
-  # visualise on click
-  observeEvent(input$visualize, {
-    cat("Choose visualisation\n")
-    if(input$visualize != "Choisir un type de visualisation"){ 
-      show("start_visu")
-    } else {
-      hide("start_visu")
     }
   })
   
@@ -226,15 +228,14 @@ function(input, output, session) {
         app_values$result_manip_view <- results_manip[["view"]]
         
       } else if(input$manipulate == "nombre_especes"){
-        browser()
         
         if (input$import == "sauvages"){
           current_dataset$Nombre_individus <- 1
         }
         
         results_manip = current_dataset[ , .(index = length(Nombre_individus[Nombre_individus > 0])),
-                                   by = Espece]
-               
+                                         by = Espece]
+        
         app_values$result_manip <- results_manip
         app_values$result_manip_view <- results_manip
         
@@ -250,16 +251,16 @@ function(input, output, session) {
                                                   options = list(pageLength = 24, dom = 'tp', searching = FALSE), escape = FALSE)
       
       # Visualisation ----
-      if(input$visualize == "graphique") {
-
-        graph <- make_graph(
-          data_to_plot = app_values$result_manip,
-          variable_group = input$variable_group,
-          variable_info = app_config[valeur == input$variable_group],
-          current_dataset_name = input$import,
-          index_type = input$manipulate)
-        output$visu_graph_output <- renderPlot({graph}, height = 500,)
-      }
+      
+      
+      graph <- make_graph(
+        data_to_plot = app_values$result_manip,
+        variable_group = input$variable_group,
+        variable_info = app_config[valeur == input$variable_group],
+        current_dataset_name = input$import,
+        index_type = input$manipulate)
+      output$visu_graph_output <- renderPlot({graph}, height = 500)
+      
     }
   })
   
@@ -277,6 +278,12 @@ function(input, output, session) {
     app_values$return_to_input <- TRUE
   })
   
+  observeEvent(input$new_analysis_top_map_birds, {
+    app_values$return_to_input <- TRUE
+  })
+  
+  
+  
   observeEvent(app_values$return_to_input, {
     if(app_values$return_to_input){
       cat("return to ui\n")
@@ -287,6 +294,8 @@ function(input, output, session) {
       app_values$return_to_input <- FALSE
     }
   })
+  
+  
   
   # Results
   output$data_output <- DT::renderDataTable(
