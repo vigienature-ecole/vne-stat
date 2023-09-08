@@ -53,7 +53,7 @@ fluidPage(
         ),
         htmlOutput("help_import_ui"),
         actionButton(
-          "start_data", 
+          "view_raw_data", 
           "Voir les données brutes", 
           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"
         )
@@ -72,7 +72,7 @@ fluidPage(
         textOutput("help_level"),
         selectInput("variable_level", "Filtrer selon une valeur de la variable", "Choisir une valeur", selected = "Choisir une valeur"),
         selectInput("species_filter", "Filtrer selon une espece (facultatif)", "Choisir une espèce", selected = "Choisir une espèce"),
-        actionButton("start_manip", "Voir le résultat du calcul", 
+        actionButton("view_res_manip", "Voir le résultat du calcul", 
                      style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"
         )
       ),
@@ -83,7 +83,7 @@ fluidPage(
         h3("Visualiser les données"),
         helpText("Cette étape permet de représenter les données de façon à conclure. Il est possible de faire des graphiques, des cartes ou des tableaux ordonnées."),
         htmlOutput("help_visu_ui"),
-        actionButton("start_visu", "Visualiser les données", 
+        actionButton("view_res_visu", "Visualiser les données", 
                      style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%")
       )
     )
@@ -105,7 +105,8 @@ fluidPage(
                         ),
                         bsCollapsePanel(
                           title = "Visualisation", 
-                          htmlOutput("graph_info"),
+                          htmlOutput("title_graph") |>
+                            tagAppendAttributes(style = 'font-weight: bolder;text-align: center;font-size: x-large;'),
                           plotOutput("visu_graph_output"),
                           htmlOutput("error_vis") %>% 
                             tagAppendAttributes(style = 'color:green;font-weight: bolder;'),

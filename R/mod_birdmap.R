@@ -103,7 +103,7 @@ mod_map_birds_ui <- function(id) {
       )
     ),
     column( width = 8,
-            plotOutput(ns("map"))
+            plotOutput(ns("map")),plotOutput(ns("graph"))
             
     )
   )
@@ -146,16 +146,44 @@ mod_map_birds_server <- function(id, parent_session){
         tmap::tm_fill(col = variable_to_plot, n = 10) 
       
       if(input$period != "all"){
-        observation_map <- observation_map + tmap::tm_facets(by = input$period)
+        browser()
+        observation_map <- observation_map + tmap::tm_facets(by = input$period, free.coords = FALSE)
       } 
       
       observation_map <- observation_map +
         tmap::tm_shape(mod_values$carte_france) +  
         tmap::tm_borders() +
         tmap::tm_layout(frame = FALSE, legend.outside = TRUE) 
-      
+
       observation_map
     })
+    
+    output$graph <- renderPlot({
+
+      # select map
+      map_to_plot <- mod_values$maps[[input$map_type]][[input$period]]
+      
+      if (input$variable == "total_observation"){
+        variable_to_plot = "total_observation"
+      } else if (input$variable == "total_observation_"){
+        variable_to_plot = paste0("total_observation_", input$espece_focale)
+      } else {
+        variable_to_plot = paste0("frequence_observation_", input$espece_focale)
+      }
+      
+      variable_to_plot <- gsub(" ", "_", variable_to_plot)
+      
+      # valeur minimale à représenter
+      map_to_plot <- map_to_plot |>
+        dplyr::filter(total_observation > input$min_obs) |>
+        dplyr::filter_at(dplyr::vars(variable_to_plot), dplyr::any_vars(. > 0))
+      colnames(map_to_plot) <- gsub(" ", "_", colnames(map_to_plot))
+      ggplot2::ggplot(map_to_plot, ggplot2::aes_string(x = variable_to_plot, fill = variable_to_plot)) +
+        ggplot2::geom_histogram(fill = "#ebc034")
+      
+    })
+    
+    
   })
 }
 

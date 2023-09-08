@@ -29,15 +29,15 @@ function(input, output, session) {
   mod_map_birds_server("map_birds", parent_session = session)
   
   # hide elements when app starts
-  hide("start_data")
+  hide("view_raw_data")
   hide("manipulate")
   hide("variable_group")
   hide("variable_filter")
   hide("variable_level")
   hide("species_filter")
-  hide("start_manip")
+  hide("view_res_manip")
   hide("visualize")
-  hide("start_visu")
+  hide("view_res_visu")
   
   # app_values
   app_values <- reactiveValues(
@@ -64,7 +64,7 @@ function(input, output, session) {
     cat("Choose dataset\n")
     
     if(input$import != "Choisir un jeu de données"){ 
-      show("start_data")
+      show("view_raw_data")
       show("manipulate")
       current_dataset_name = input$import
       app_values$current_dataset <- data_values[[input$import]]
@@ -75,7 +75,7 @@ function(input, output, session) {
                                                                       dataset_info$label)))
       
     } else {
-      hide("start_data")
+      hide("view_raw_data")
       hide("manipulate")
     }
   })
@@ -87,25 +87,17 @@ function(input, output, session) {
   observeEvent(input$manipulate, {
     cat("Choose operation :\n")
     if (input$manipulate != "Choisir une opération" ){
-      show("visualize")
-      show("start_manip")
-      show("start_visu")
+      
+      show("view_res_visu")
     } else {
-      hide("visualize")
-      hide("start_manip")
-      hide("start_visu")
+      hide("view_res_visu")
     }
-
     
-    if(input$manipulate != "Choisir une opération" & input$manipulate != "reseau"){ 
-      
-      current_dataset_name = input$import
-      visualisation_information <- app_config[app_config$type == "visualisation" & app_config[[current_dataset_name]]]
-      
-      updateSelectInput(session, "visualize", choices = c("Choisir un type de visualisation", setNames(visualisation_information$valeur, 
-                                                                                                       visualisation_information$label)))
-      show("start_manip")
-      show("start_visu")
+    
+    if(input$manipulate %in% c("Choisir une opération","reseau", "map_birds")){ 
+      hide("view_res_manip")
+    } else {
+      show("view_res_manip")
     }
     
     if(input$manipulate %in% c("diversite", "nombre_obs", "abondance")){ 
@@ -132,14 +124,11 @@ function(input, output, session) {
     } else {
       hide("variable_filter")
     }
-new_analysis_top_map_birds
+    
     if(input$manipulate == "reseau") {
-      show("start_visu")
-      output$ <- renderText("Le résultat de l'outil de visualisation de réseaux n'est disponible que dans l'onglet visualisation")
+      output$help_manip <- renderText("Le résultat de l'outil de visualisation de réseaux n'est disponible que dans l'onglet visualisation")
     } else if (input$manipulate == "map_birds"){
-      show("start_visu")
-      hide("start_manip")
-      output$ <- renderText("Le résultat de l'outil de visualisation de carte n'est disponible que dans l'onglet visualisation")
+      output$help_manip <- renderText("Le résultat de l'outil de visualisation de carte n'est disponible que dans l'onglet visualisation")
     } else {
       output$help_manip <- NULL
     }
@@ -160,19 +149,19 @@ new_analysis_top_map_birds
   
   # click buttons ----
   
-  observeEvent(input$start_data, {
+  observeEvent(input$view_raw_data, {
     cat("View raw data\n")
     app_values$open_panel <- "Données importées"
     app_values$start_analysis <- TRUE
   })
   
-  observeEvent(input$start_manip, {
+  observeEvent(input$view_res_manip, {
     cat("View manip result\n")
     app_values$open_panel <- "Manipulation"
     app_values$start_analysis <- TRUE
   })
   
-  observeEvent(input$start_visu, {
+  observeEvent(input$view_res_visu, {
     cat("View viz result\n")
     if(input$manipulate == "reseau") {
       updateTabsetPanel(session, "vne_stats",
@@ -264,17 +253,45 @@ new_analysis_top_map_birds
     }
   })
   
+  output$title_graph <- renderText({
+    title_graph <- app_config$label[app_config$valeur == input$manipulate]
+    
+    if (input$variable_group != "Choisir une variable") {
+      title_graph <- paste(title_graph,
+                           "en fonction de la variable",
+                           app_config$label[app_config$valeur == input$variable_group])
+    }
+    
+    if (input$species_filter != "Choisir une espèce") {
+      title_graph <- paste(title_graph,
+                           "pour l'espèce",
+                           input$species_filter)
+    }
+    
+    if (input$variable_filter != "Choisir une variable") {
+      title_graph <- paste(title_graph,
+                           "pour la valeur",
+                           input$variable_level,
+                           "de la variable",
+                           input$variable_filter)
+    }
+    
+    title_graph
+  })
+  
   # buttons to return to the input interface
   observeEvent(input$new_analysis_bottom, {
     app_values$return_to_input <- TRUE
   })
   
-  observeEvent(input$new_analysis_top_network, {
-    app_values$return_to_input <- TRUE
-  })
+  
   
   
   observeEvent(input$new_analysis_top, {
+    app_values$return_to_input <- TRUE
+  })
+  
+  observeEvent(input$new_analysis_top_network, {
     app_values$return_to_input <- TRUE
   })
   
