@@ -4,26 +4,29 @@
 library(magrittr)
 library(shinydashboard)
 
-mod_network_ui <- function(id) {
+mod_network_biolit_ui <- function(id) {
   ns <- NS(id)
   tagList(
     column(
       style='min-height:500px; border: 10px solid white; padding: 10px; border-radius: 20px; background: #DDEDDD', width = 4, align="center",
       h3("Paramètres de la représentation du réseau"),
-      selectInput(ns("taxon_depth_insect"), "Niveau taxonomique des insectes (et autres organismes floricoles)", choices = setNames(c("Ordre", "Espece"), c("Ordres d'insecte", "Espèces d'insecte"))),
-      selectInput(ns("taxon_depth_plant"), "Niveau taxonomique des plantes", choices = setNames(c("Famille_plante", "Plante"), c("Familles de plante", "Espèces de plante"))),
-      selectizeInput(ns("taxon_select_insect"), "Sélectionner des insectes (au moins deux)", choices = "", multiple = TRUE, options = NULL),
-      helpText("Si laissé vide, alors tous les insectes sont affichés (selon le nombre d'intéraction minimum), cela permet de faire des comparaisons précises ou de regarder des réseaux plus simples"),
-      selectizeInput(ns("taxon_select_plant"), "Sélectionner des plantes (au moins deux)", choices = "", multiple = TRUE, options = NULL),
-      helpText("Si laissé vide, alors toutes les plantes sont affichées (selon le nombre d'intéraction minimum), cela permet de faire des comparaisons précises ou de regarder des réseaux plus simples"),
+      selectizeInput(ns("taxon_select_animal"), "Sélectionner un animal (un ou plusieurs)", choices = c("Gibbule ombiliquée", "Patelle", "Gibbule commune", "Bigorneau",
+                                                                                                        "Littorine obtuse", "Pourpre", "Nasse réticulée", "Monodonte",
+                                                                                                        "Huîtres", "Gibbule cendrée", "Bigorneau perceur", "Littorine fabalis",
+                                                                                                        "Perceur japonais", "Littorine des rochers", "Littorine à lignes noires", "Calliostome",
+                                                                                                        "Fucus spiralé", "Pelvétie caniculée"), multiple = TRUE, options = NULL),
+      helpText("Si laissé vide, alors tous les animaux sont affichés (selon le nombre d'intéraction minimum), cela permet de faire des comparaisons précises ou de regarder des réseaux plus simples"),
+      selectizeInput(ns("taxon_select_algue"), "Sélectionner des ceintures alguales (une ou plusieurs)", choices = sort(c("05_Fucus denté", "02_Fucus spiralé", "03_Fucus vésiculeux", "01_Pelvétie",
+                                                                                                                     "04_Ascophylle noueux", "06_Himanthale")), multiple = TRUE, options = NULL),
+      helpText("Si laissé vide, alors toutes les algues sont affichées (selon le nombre d'intéraction minimum), cela permet de faire des comparaisons précises ou de regarder des réseaux plus simples"),
       sliderInput(ns("max_interactions"),
                   "Nombre d'interactions représentées",
                   min = 2,
                   max = 3000,
                   value = 50),
       helpText("Ce champ permet de choisir le nombre d'intéractions représentées. Cela permet de réduire la complexité du réseau mais biaise les données pour les taxons les plus abondants. Vous pouvez utiliser les filtres par espèces pour regarder les taxons plus rares."),
-      checkboxInput(ns("normalise_interactions_plant"), label = "Normaliser les intéractions selon les plantes", value = TRUE),
-      helpText("Si l'on utilise cette option, le nombre d'intéractions est divisé par le nombre total d'intéractions observées sur cette plante. Attention certaines plantes (comme le Lierre grimpant ou la carotte sauvage sont très représentés tandis que d'autres n'ont été vues qu'une seule fois) ce qui peut biaiser les résultats."),
+      checkboxInput(ns("normalise_interactions_algue"), label = "Normaliser les intéractions selon les algues", value = TRUE),
+      helpText("Si l'on utilise cette option, le nombre d'intéractions est divisé par le nombre total d'intéractions observées sur cette cinture alguale Attention certaines ceinture (comme le Lierre grimpant ou la carotte sauvage sont très représentés tandis que d'autres n'ont été vues que peut de fois) ce qui peut biaiser les résultats."),
       actionButton(
         ns("view_network"), 
         "Afficher le réseaux / Appliquer les paramètres", 
@@ -31,83 +34,57 @@ mod_network_ui <- function(id) {
       )
     ),
     column( width = 8,
-            htmlOutput(ns("plant_title")) %>% 
+            htmlOutput("Ceintures alguales") %>% 
               tagAppendAttributes(style = 'color: green; font-weight: bolder; text-align: center; font-size:200%;'),
             plotOutput(ns("interaction_plot")),
             div(style = "height:300px"),
-            htmlOutput(ns("insect_title")) %>% 
-              tagAppendAttributes(style = 'color: green; font-weight: bolder; text-align: center; font-size:200%'),
-            uiOutput(ns("boxes_insects")),
-            uiOutput(ns("boxes_plants"))
+            htmlOutput("Animaux") %>% 
+              tagAppendAttributes(style = 'color: green; font-weight: bolder; text-align: center; font-size:200%')
             
     )
   )
 }
 
 
-mod_network_server <- function(id, parent_session){
+mod_network_biolit_server <- function(id, parent_session){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     # Variables for module
     mod_values <- reactiveValues(
       taxon_change = 1,
       filter_change = 1,
-      interactions = readRDS("../../datasets/papers/spipoll_interaction.rds"),
-      insect_images = readRDS("../../datasets/papers/spipoll_insect_images.rds"),
-      plant_images = readRDS("../../datasets/papers/spipoll_plant_images.rds"),
-      current_full_network = NULL,
+      interactions = readRDS("../../datasets/papers/biolit_interaction.rds"),
+      current_full_network = readRDS("../../datasets/papers/biolit_interaction.rds"),
       current_filtered_taxon_network = NULL,
       current_filtered_taxon_network_max = NULL,
       interaction_matrix = NULL
     )
     
-    observeEvent(input$taxon_depth_insect, {
-      cat("change insect taxo\n")
-      mod_values$taxon_change = mod_values$taxon_change + 1
-    })
-    
-    observeEvent(input$taxon_depth_plant, {
-      cat("change plant taxo\n")
-      mod_values$taxon_change = mod_values$taxon_change + 1
-    })
-    
-    observeEvent(mod_values$taxon_change, {
-      cat("change in taxo detected\n")
-      # choose taxonomic level
-      current_full_network <- mod_values$interactions[[paste0(input$taxon_depth_insect, "_", input$taxon_depth_plant)]]
-      
-      mod_values$current_full_network <- current_full_network
-      
-      updateSelectizeInput(session, "taxon_select_plant", choices = sort(dplyr::pull(current_full_network[, 2])), server = TRUE)
-      updateSelectizeInput(session, "taxon_select_insect", choices = sort(dplyr::pull(current_full_network[, 1])), server = TRUE)
-      mod_values$filter_change = mod_values$filter_change + 1
-    })
-    
-    observeEvent(input$taxon_select_insect, {
+    observeEvent(input$taxon_select_animal, {
       cat("change insect filter\n")
       mod_values$filter_change = mod_values$filter_change + 1
     })
     
-    observeEvent(input$taxon_select_plant, {
+    observeEvent(input$taxon_select_algue, {
       cat("change plant filter\n")
       mod_values$filter_change = mod_values$filter_change + 1
     })
     
     observeEvent(mod_values$filter_change, {
       cat("change filter detected \n")
-      current_filtered_taxon_network <- mod_values$current_full_network
+      current_filtered_taxon_network <- mod_values$interactions
       
-      if(!is.null(input$taxon_select_plant)){
-        if (length(input$taxon_select_plant) > 1) {
+      if(!is.null(input$taxon_select_algue)){
+        if (length(input$taxon_select_algue) > 1) {
           cat("effective filtering plant\n")
-          current_filtered_taxon_network <- subset(current_filtered_taxon_network, dplyr::pull(current_filtered_taxon_network[, input$taxon_depth_plant]) %in% input$taxon_select_plant)
+          current_filtered_taxon_network <- subset(current_filtered_taxon_network, dplyr::pull(current_filtered_taxon_network[, input$taxon_depth_plant]) %in% input$taxon_select_algue)
         }
       }
       
-      if(!is.null(input$taxon_select_insect)){
-        if (length(input$taxon_select_insect) > 1) {
+      if(!is.null(input$taxon_select_animal)){
+        if (length(input$taxon_select_animal) > 1) {
           cat("effective filtering insect\n")
-          current_filtered_taxon_network <- subset(current_filtered_taxon_network, dplyr::pull(current_filtered_taxon_network[, input$taxon_depth_insect]) %in% input$taxon_select_insect)
+          current_filtered_taxon_network <- subset(current_filtered_taxon_network, dplyr::pull(current_filtered_taxon_network[, input$taxon_depth_insect]) %in% input$taxon_select_animal)
         }
       }
       updateSliderInput(session, "max_interactions",
@@ -129,23 +106,23 @@ mod_network_server <- function(id, parent_session){
     # select taxonomic level of the network
     observeEvent(input$view_network, {
       
-      cat("render results")
+
       
       
-      current_filtered_taxon_network <- filtered_network_max_interactions()
+      current_filtered_taxon_network <- mod_values$current_full_network 
       
       
       
-      if (input$normalise_interactions_plant){
+      if (input$normalise_interactions_algue){
         
         # calculate total interaction (for normalisation)
-        plant_total_interactions <- current_filtered_taxon_network %>%
-          dplyr::group_by_at(input$taxon_depth_plant) %>%
+        algue_total_interactions <- current_filtered_taxon_network %>%
+          dplyr::group_by(Ceinture_algue) %>%
           dplyr::summarise(Nombre_total = sum(nombre)) %>%
           dplyr::arrange(desc(Nombre_total))
         
         # join for normalisation
-        interaction_limited <- dplyr::inner_join(current_filtered_taxon_network, plant_total_interactions, by = input$taxon_depth_plant) %>%
+        interaction_limited <- dplyr::inner_join(current_filtered_taxon_network, algue_total_interactions, by = "Ceinture_algue") %>%
           dplyr::mutate(interaction_value = nombre / Nombre_total) %>%
           dplyr::select(-nombre, -Nombre_total)
       } else {
@@ -154,13 +131,13 @@ mod_network_server <- function(id, parent_session){
       
       
       
-      interaction_limited <- subset(interaction_limited, interaction_limited[, input$taxon_depth_plant] != "")
+      interaction_limited <- subset(interaction_limited, interaction_limited[, "Ceinture_algue"] != "")
       
       interaction_matrix <- interaction_limited %>%
         tidyr::pivot_wider(names_from = 2, values_from = interaction_value, values_fill = 0)
       
       interaction_matrix <- data.frame(interaction_matrix)
-      row.names(interaction_matrix) <- interaction_matrix[, input$taxon_depth_insect]
+      row.names(interaction_matrix) <- interaction_matrix[, "Espece"]
       interaction_matrix <- interaction_matrix[, -1]
       
       mod_values$interaction_matrix <- as.matrix(interaction_matrix)

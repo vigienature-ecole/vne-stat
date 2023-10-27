@@ -9,7 +9,6 @@
 
 library(shiny)
 library(shinyjs)
-library(magrittr)
 
 app_config = data.table::fread("data/app_config.csv")
 app_config <- app_config[order(app_config$label), ]
@@ -26,6 +25,7 @@ function(input, output, session) {
   # init module
   mod_login_server("login", parent_session = session)
   mod_network_server("reseaux", parent_session = session)
+  mod_network_biolit_server("reseaux_biolit", parent_session = session)
   mod_map_birds_server("map_birds", parent_session = session)
   
   # hide elements when app starts
@@ -80,6 +80,7 @@ function(input, output, session) {
     }
   })
   
+  hide("variable_filter")
   # when manipulation is selected ----
   # show button to access to result (table)
   # show options (group, filter)
@@ -117,10 +118,10 @@ function(input, output, session) {
     } else {
       hide("species_filter")
     }
-    
+
     if(input$manipulate %in% c("diversite", "nombre_obs", "abondance", "nombre_especes")){
       show("variable_filter")
-      updateSelectInput(session, "variable_filter", choices = c("Choisir une variable", sort(colnames(app_values$current_dataset))))
+      updateSelectInput(session, "variable_filter", choices = c("Choisir une variable", sort(colnames(app_values$current_dataset)[!colnames(app_values$current_dataset) %in% c("Numero_observation", "Espece", "Nombre_individus")])))
     } else {
       hide("variable_filter")
     }
@@ -143,7 +144,12 @@ function(input, output, session) {
       } else {
         hide("variable_level")
         output$help_level <- NULL
+        shinyjs::reset("variable_level")
       }
+    } else {
+      hide("variable_level")
+      output$help_level <- NULL
+      shinyjs::reset("variable_level")
     }
   })
   
@@ -164,8 +170,14 @@ function(input, output, session) {
   observeEvent(input$view_res_visu, {
     cat("View viz result\n")
     if(input$manipulate == "reseau") {
-      updateTabsetPanel(session, "vne_stats",
-                        selected = "reseau")
+      if(input$import == "biolit") {
+        updateTabsetPanel(session, "vne_stats",
+                          selected = "reseau_biolit")
+      } else {
+        updateTabsetPanel(session, "vne_stats",
+                          selected = "reseau")
+      }
+      
     } else if(input$manipulate == "map_birds") {
       updateTabsetPanel(session, "vne_stats",
                         selected = "map_birds")
@@ -178,7 +190,6 @@ function(input, output, session) {
   observeEvent(app_values$start_analysis, {
     if(app_values$start_analysis){
       cat("Start analysis\n")
-      
       # navigation
       updateTabsetPanel(session, "vne_stats",
                         selected = "results")
@@ -241,19 +252,21 @@ function(input, output, session) {
       
       # Visualisation ----
       
-      
-      graph <- make_graph(
-        data_to_plot = app_values$result_manip,
-        variable_group = input$variable_group,
-        variable_info = app_config[valeur == input$variable_group],
-        current_dataset_name = input$import,
-        index_type = input$manipulate)
-      output$visu_graph_output <- renderPlot({graph}, height = 500)
+      if (!is.null(app_values$result_manip)){
+        graph <- make_graph(
+          data_to_plot = app_values$result_manip,
+          variable_group = input$variable_group,
+          variable_info = app_config[valeur == input$variable_group],
+          current_dataset_name = input$import,
+          index_type = input$manipulate)
+        output$visu_graph_output <- renderPlot({graph}, height = 500)
+      }
       
     }
   })
   
   output$title_graph <- renderText({
+    if(input$manipulate == "abondance" | input$manipulate == "diversite" | input$manipulate == "nombre_obs"){
     title_graph <- app_config$label[app_config$valeur == input$manipulate]
     
     if (input$variable_group != "Choisir une variable") {
@@ -262,7 +275,7 @@ function(input, output, session) {
                            app_config$label[app_config$valeur == input$variable_group])
     }
     
-    if (input$species_filter != "Choisir une espèce") {
+    if (input$manipulate == "abondance" & input$species_filter != "Choisir une espèce") {
       title_graph <- paste(title_graph,
                            "pour l'espèce",
                            input$species_filter)
@@ -277,6 +290,9 @@ function(input, output, session) {
     }
     
     title_graph
+    } else {
+      NULL
+    }
   })
   
   # buttons to return to the input interface
