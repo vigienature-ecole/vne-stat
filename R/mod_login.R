@@ -8,7 +8,7 @@ mod_login_ui <- function(id) {
       h2("Bienvenue dans l'interface d'analyse de données de Vigie-Nature École"),
       br(),
       style='min-height:500px; border: 10px solid white; padding: 10px; border-radius: 20px; background: #DDEDDD', width = 6, align="center", offset = 3,
-      selectInput(ns("type_login"), "Vous êtes :", c("Choisir une catégorie", "Enseignant·e", "Élève", "Étudiant·e", "Chercheuse·eur", "Équipe VNE", "Autre")),
+      selectInput(ns("type_login"), "Vous êtes :", c("Choisir une catégorie", "Enseignant ou enseignante", "Élève", "Étudiant ou étudiante", "Chercheuse ou chercheur", "Équipe VNE", "Autre")),
       textInput(ns("type_precis_login"), "Présisez (facultatif sauf si choix autre)"),
       textInput(ns("utilisation_detail"), "Dites nous pourquoi vous utilisez cette application (facultatif)"),
       htmlOutput(ns("error"))  %>% 
