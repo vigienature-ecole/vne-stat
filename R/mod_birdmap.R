@@ -21,12 +21,14 @@ mod_map_birds_ui <- function(id) {
                                                                                  "Carte par region",
                                                                                  "Carte de la france"))),
       selectInput(ns("variable"), "Choix de la variable à représenter", choices = setNames(c(
+        "frequence_observation",
         "total_observation",
-        "total_observation_",
-        "frequence_observation"), c(
-          "Total des observations",
-          "Total des observations d'espèces",
-          "Frequence d'observation des espèces")
+        "total_observation_"
+      ), c(
+        "Frequence d'observation de l'espèce",
+        "Total des observations",
+        "Total des observations d'espèces"
+      )
       )),
       selectInput(ns("period"), "Choix de la période à représenter", choices = setNames(c(
         "all",
@@ -95,14 +97,10 @@ mod_map_birds_ui <- function(id) {
                   "Nombre minimum d'observation pour représentation",
                   min = 0,
                   max = 300,
-                  value = 5),
-      actionButton(
-        ns("view_map"), 
-        "Afficher la carte / Appliquer les paramètres", 
-        style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"
-      )
+                  value = 5)
     ),
     column( width = 8,
+            uiOutput(ns("bird_image")),
             plotOutput(ns("map")),plotOutput(ns("graph"))
             
     )
@@ -125,10 +123,13 @@ mod_map_birds_server <- function(id, parent_session){
       
       if (input$variable == "total_observation"){
         variable_to_plot = "total_observation"
+        hide("espece_focale")
       } else if (input$variable == "total_observation_"){
         variable_to_plot = paste0("total_observation_", input$espece_focale)
+        show("espece_focale")
       } else {
         variable_to_plot = paste0("frequence_observation_", input$espece_focale)
+        show("espece_focale")
       }
       
       # valeur minimale à représenter
@@ -153,8 +154,24 @@ mod_map_birds_server <- function(id, parent_session){
         tmap::tm_shape(mod_values$carte_france) +  
         tmap::tm_borders() +
         tmap::tm_layout(frame = FALSE, legend.outside = TRUE, frame.lwd = NA, panel.label.bg.color = NA, panel.label.size = 2)
-
+      
       observation_map
+    })
+    
+    output$bird_image <- renderUI({
+      
+      tags$img(src = paste0("https://depot.vigienature-ecole.fr/restits/Bilan/2020/img/vignettes_oiseaux/", 
+                            stringr::str_to_title(
+                              iconv(
+                                gsub("-", "_", 
+                                     gsub("'", "_", 
+                                          gsub(" ", "_", input$espece_focale)))
+                                ,from="UTF-8",to="ASCII//TRANSLIT")
+                            )
+                            ,"_1.jpg")
+               
+               , height = "150px"
+      )
     })
     
     # output$graph <- renderPlot({
