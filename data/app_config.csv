@@ -22,7 +22,7 @@ ids,type,with_variable,oiseaux,vdt,escargots,spipoll,sauvages,biolit,alamer,vari
 32,variable,FALSE,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,FALSE,quanti_points,name,FALSE,Latitude,Latitude,
 ,variable,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,quali,name,FALSE,Surface_zone,Surface de la zone,
 ,operation,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,NA,NA,NA,nombre_obs,Nombre d’observations,Cette option calcule la somme du nombre de fois où le protocole a été mis en place (par catégorie si un jeton est placé). 
-,operation,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,NA,NA,NA,nombre_especes,Nombre de fois où les espèces ont été vues,
+,operation,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,NA,NA,NA,nombre_especes,Nombre de fois où les espèces ont été vues,
 ,data,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,NA,NA,NA,spipoll,Spipoll,Ce jeu de données contient des données sur les insectes pollinisateurs et leur environnement collectées avec le protocole Spipoll.
 ,variable,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,quali,name,FALSE,Temperature,Température,
 ,variable,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,quali,name,FALSE,Vent,Vent,
