@@ -8,6 +8,11 @@ mod_network_ui <- function(id) {
   ns <- NS(id)
   tagList(
     column(
+      actionButton(
+        ns("view_network"), 
+        "Afficher le réseaux / Appliquer les paramètres", 
+        style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"
+      ),
       style='min-height:500px; border: 10px solid white; padding: 10px; border-radius: 20px; background: #DDEDDD', width = 4, align="center",
       h3("Paramètres de la représentation du réseau"),
       selectInput(ns("taxon_depth_insect"), "Niveau taxonomique des insectes (et autres organismes floricoles)", choices = setNames(c("Ordre", "Espece"), c("Ordres d'insecte", "Espèces d'insecte"))),
@@ -23,12 +28,8 @@ mod_network_ui <- function(id) {
                   value = 50),
       helpText("Ce champ permet de choisir le nombre d'intéractions représentées. Cela permet de réduire la complexité du réseau mais biaise les données pour les taxons les plus abondants. Vous pouvez utiliser les filtres par espèces pour regarder les taxons plus rares."),
       checkboxInput(ns("normalise_interactions_plant"), label = "Normaliser les intéractions selon les plantes", value = TRUE),
-      helpText("Si l'on utilise cette option, le nombre d'intéractions est divisé par le nombre total d'intéractions observées sur cette plante. Attention certaines plantes (comme le Lierre grimpant ou la carotte sauvage sont très représentés tandis que d'autres n'ont été vues qu'une seule fois) ce qui peut biaiser les résultats."),
-      actionButton(
-        ns("view_network"), 
-        "Afficher le réseaux / Appliquer les paramètres", 
-        style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"
-      )
+      helpText("Si l'on utilise cette option, le nombre d'intéractions est divisé par le nombre total d'intéractions observées sur cette plante. Attention certaines plantes (comme le Lierre grimpant ou la carotte sauvage sont très représentés tandis que d'autres n'ont été vues qu'une seule fois) ce qui peut biaiser les résultats.")
+      
     ),
     column( width = 8,
             htmlOutput(ns("plant_title")) %>% 
