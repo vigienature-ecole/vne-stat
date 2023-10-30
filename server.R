@@ -77,6 +77,11 @@ function(input, output, session) {
     } else {
       hide("view_raw_data")
       hide("manipulate")
+      hide("variable_filter")
+      hide("variable_filter")
+      hide("variable_group")
+      hide("view_res_manip")
+      hide("view_res_visu")
     }
   })
   
