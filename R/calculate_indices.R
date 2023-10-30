@@ -7,27 +7,32 @@ calculate_indices <- function(data, index, variable_group){
   }
   
   # if subobservation level
-  # browser()
-
   
   if (!"Nombre_individus" %in% colnames(data)){
     data$Nombre_individus <- 1
   }
   
-    if (index == "abondance"){
-    
+  if (index == "abondance"){
     # calcul abondance par observation
     biodiversity_index = data[ , .(index = sum(Nombre_individus, na.rm = TRUE)),
                                by = group_variable]
   } else {
+    # attention probalement pas lichen go proof !!!!
     if("Numero_quadrat" %in% colnames(data) | "placette" %in% colnames(data)){
-      # group <- c(group_variable, "Espece")
-      # data = data[ , .(Nombre_individus = sum(Nombre_individus, na.rm = TRUE)),
-      #                            by = group]
+      if("Numero_quadrat" %in% colnames(data)){
+      group <- c(group_variable, "Numero_quadrat")
+      } else {
+        group <- c(group_variable, "placette")
+      }
+      biodiversity_index_subplot = data[ , .(index = length(Nombre_individus[Nombre_individus > 0])),
+                                 by = group]
+      biodiversity_index = biodiversity_index_subplot[ , .(index = mean(index)),
+                                 by = group_variable]
+    } else {
+      
+      biodiversity_index = data[ , .(index = length(Nombre_individus[Nombre_individus > 0])),
+                                 by = group_variable]
     }
-    
-    biodiversity_index = data[ , .(index = length(Nombre_individus[Nombre_individus > 0])),
-                               by = group_variable]
   }
   
   
@@ -100,7 +105,7 @@ calculate_indices <- function(data, index, variable_group){
                                        "Nombre de sessions d'observation")
     }
   }
-
+  
   results <- list(result_manip, result_manip_view)
   names(results) <- c("result_manip", "view")
   
