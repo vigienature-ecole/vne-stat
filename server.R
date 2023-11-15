@@ -123,7 +123,7 @@ function(input, output, session) {
     } else {
       hide("species_filter")
     }
-
+    
     if(input$manipulate %in% c("diversite", "nombre_obs", "abondance", "nombre_especes")){
       show("variable_filter")
       updateSelectInput(session, "variable_filter", choices = c("Choisir une variable", sort(colnames(app_values$current_dataset)[!colnames(app_values$current_dataset) %in% c("Numero_observation", "Espece", "Nombre_individus")])))
@@ -203,6 +203,12 @@ function(input, output, session) {
       
       # raw data
       app_values$current_dataset <- data_values[[input$import]]
+      # remove NA from Nombre_individus
+      
+
+      if(input$import == "escargots") {
+        app_values$current_dataset <- app_values$current_dataset[!is.na(Nombre_individus) ]
+      }
       
       # data wrandling
       if (input$variable_filter != "Choisir une variable"){
@@ -272,29 +278,29 @@ function(input, output, session) {
   
   output$title_graph <- renderText({
     if(input$manipulate == "abondance" | input$manipulate == "diversite" | input$manipulate == "nombre_obs"){
-    title_graph <- app_config$label[app_config$valeur == input$manipulate]
-    
-    if (input$variable_group != "Choisir une variable") {
-      title_graph <- paste(title_graph,
-                           "en fonction de la variable",
-                           app_config$label[app_config$valeur == input$variable_group])
-    }
-    
-    if (input$manipulate == "abondance" & input$species_filter != "Choisir une espèce") {
-      title_graph <- paste(title_graph,
-                           "pour l'espèce",
-                           input$species_filter)
-    }
-    
-    if (input$variable_filter != "Choisir une variable") {
-      title_graph <- paste(title_graph,
-                           "pour la valeur",
-                           input$variable_level,
-                           "de la variable",
-                           input$variable_filter)
-    }
-    
-    title_graph
+      title_graph <- app_config$label[app_config$valeur == input$manipulate]
+      
+      if (input$variable_group != "Choisir une variable") {
+        title_graph <- paste(title_graph,
+                             "en fonction de la variable",
+                             app_config$label[app_config$valeur == input$variable_group])
+      }
+      
+      if (input$manipulate == "abondance" & input$species_filter != "Choisir une espèce") {
+        title_graph <- paste(title_graph,
+                             "pour l'espèce",
+                             input$species_filter)
+      }
+      
+      if (input$variable_filter != "Choisir une variable") {
+        title_graph <- paste(title_graph,
+                             "pour la valeur",
+                             input$variable_level,
+                             "de la variable",
+                             input$variable_filter)
+      }
+      
+      title_graph
     } else {
       NULL
     }
