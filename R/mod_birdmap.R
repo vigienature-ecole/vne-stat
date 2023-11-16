@@ -39,58 +39,58 @@ mod_map_birds_ui <- function(id) {
       
       
       selectInput(ns("espece_focale"), "Choix de l'espèce à représenter", choices = sort(c("Accenteur mouchet", 
-                                                                                            "Bergeronnette grise",
-                                                                                            "Bouvreuil pivoine",
-                                                                                            "Bruant jaune",
-                                                                                            "Bruant zizi", 
-                                                                                            "Chardonneret élégant", 
-                                                                                            "Choucas des tours",  
-                                                                                            "Corneille noire",
-                                                                                            "Épervier d'Europe",
-                                                                                            "Étourneau sansonnet",
-                                                                                            "Fauvette à tête noire", 
-                                                                                            "Geai des chênes", 
-                                                                                            "Gobemouche gris",
-                                                                                            "Grimpereau des jardins",
-                                                                                            "Grive draine",
-                                                                                            "Grive mauvis",
-                                                                                            "Grive musicienne", 
-                                                                                            "Grosbec casse-noyaux",
-                                                                                            "Hirondelle de fenêtre", 
-                                                                                            "Hirondelle rustique",
-                                                                                            "Huppe fasciée",
-                                                                                            "Linotte mélodieuse", 
-                                                                                            "Martinet noir",
-                                                                                            "Merle noir",
-                                                                                            "Mésange à longue queue", 
-                                                                                            "Mésange bleue", 
-                                                                                            "Mésange charbonnière", 
-                                                                                            "Mésange huppée", 
-                                                                                            "Mésange noire",
-                                                                                            "Mésange nonnette", 
-                                                                                            "Moineau domestique", 
-                                                                                            "Moineau friquet", 
-                                                                                            "Perruche à collier",
-                                                                                            "Pic épeiche", 
-                                                                                            "Pic épeichette",
-                                                                                            "Pic vert",
-                                                                                            "Pie bavarde",
-                                                                                            "Pigeon biset domestique", 
-                                                                                            "Pigeon colombin", 
-                                                                                            "Pigeon ramier",
-                                                                                            "Pinson des arbres",
-                                                                                            "Pinson du Nord", 
-                                                                                            "Pouillot véloce",
-                                                                                            "Roitelet huppé", 
-                                                                                            "Rougegorge familier", 
-                                                                                            "Rougequeue à front blanc",
-                                                                                            "Rougequeue noir",
-                                                                                            "Serin cini",
-                                                                                            "Sittelle torchepot",
-                                                                                            "Tarin des aulnes",
-                                                                                            "Tourterelle turque", 
-                                                                                            "Troglodyte mignon", 
-                                                                                            "Verdier d'Europe"))),
+                                                                                           "Bergeronnette grise",
+                                                                                           "Bouvreuil pivoine",
+                                                                                           "Bruant jaune",
+                                                                                           "Bruant zizi", 
+                                                                                           "Chardonneret élégant", 
+                                                                                           "Choucas des tours",  
+                                                                                           "Corneille noire",
+                                                                                           "Épervier d'Europe",
+                                                                                           "Étourneau sansonnet",
+                                                                                           "Fauvette à tête noire", 
+                                                                                           "Geai des chênes", 
+                                                                                           "Gobemouche gris",
+                                                                                           "Grimpereau des jardins",
+                                                                                           "Grive draine",
+                                                                                           "Grive mauvis",
+                                                                                           "Grive musicienne", 
+                                                                                           "Grosbec casse-noyaux",
+                                                                                           "Hirondelle de fenêtre", 
+                                                                                           "Hirondelle rustique",
+                                                                                           "Huppe fasciée",
+                                                                                           "Linotte mélodieuse", 
+                                                                                           "Martinet noir",
+                                                                                           "Merle noir",
+                                                                                           "Mésange à longue queue", 
+                                                                                           "Mésange bleue", 
+                                                                                           "Mésange charbonnière", 
+                                                                                           "Mésange huppée", 
+                                                                                           "Mésange noire",
+                                                                                           "Mésange nonnette", 
+                                                                                           "Moineau domestique", 
+                                                                                           "Moineau friquet", 
+                                                                                           "Perruche à collier",
+                                                                                           "Pic épeiche", 
+                                                                                           "Pic épeichette",
+                                                                                           "Pic vert",
+                                                                                           "Pie bavarde",
+                                                                                           "Pigeon biset domestique", 
+                                                                                           "Pigeon colombin", 
+                                                                                           "Pigeon ramier",
+                                                                                           "Pinson des arbres",
+                                                                                           "Pinson du Nord", 
+                                                                                           "Pouillot véloce",
+                                                                                           "Roitelet huppé", 
+                                                                                           "Rougegorge familier", 
+                                                                                           "Rougequeue à front blanc",
+                                                                                           "Rougequeue noir",
+                                                                                           "Serin cini",
+                                                                                           "Sittelle torchepot",
+                                                                                           "Tarin des aulnes",
+                                                                                           "Tourterelle turque", 
+                                                                                           "Troglodyte mignon", 
+                                                                                           "Verdier d'Europe"))),
       sliderInput(ns("min_obs"),
                   "Nombre minimum d'observation pour représentation",
                   min = 0,
@@ -103,7 +103,9 @@ mod_map_birds_ui <- function(id) {
             uiOutput(ns("bird_image")),
             
             # ),
-            plotOutput(ns("map"))
+            div(
+              plotOutput(ns("map"), height = '600px' )
+            )
             
     )
   )
@@ -159,18 +161,18 @@ mod_map_birds_server <- function(id, parent_session){
             panel.grid.major = ggplot2::element_blank(),
             panel.grid.minor = ggplot2::element_blank(),
             plot.title = ggplot2::element_text(size = 20, face = "bold",
-                                      hjust=0.5,family="Arial Narrow",color="gray35"),
-            plot.subtitle = ggplot2::element_text(size = 14,hjust=0.5,
-                                         family="Arial Narrow",color="gray35"),
+                                               hjust=0.5,family="Arial Narrow",color="gray35"),
+            plot.subtitle = ggplot2::element_text(size = 16,hjust=0.5,
+                                                  family="Arial Narrow",color="gray35"),
             plot.caption = ggplot2::element_text(size=10,
-                                        family="Arial Narrow",color="gray35"),
+                                                 family="Arial Narrow",color="gray35"),
             strip.text.x = ggplot2::element_text(size=14,hjust=0.1,vjust=0, face = "bold",
-                                        family="Arial Narrow",color="gray35"),
+                                                 family="Arial Narrow",color="gray35"),
             plot.margin = ggplot2::margin(0.8, 0.5, 0.5, 0.5, "cm"),
             panel.border = ggplot2::element_blank(),
             legend.position = 'bottom',
-            legend.title = ggplot2::element_text(family="Arial Narrow",color="gray35"),
-            legend.text = ggplot2::element_text(family="Arial Narrow",color="gray35")
+            legend.title = ggplot2::element_text(size=14, family="Arial Narrow",color="gray35"),
+            legend.text = ggplot2::element_text(size=14, family="Arial Narrow",color="gray35")
           )}
       
       
@@ -179,7 +181,12 @@ mod_map_birds_server <- function(id, parent_session){
         ggplot2::geom_sf(data = mod_values$carte_france, fill = NA, lwd = 0.7)
       
       if(input$period != "all"){
-        map_ggplot <- map_ggplot + ggplot2::facet_wrap(as.formula(paste0("~", input$period)), nrow = 2 )
+        if (input$period == "saison"){
+          nrow_facet = 1
+        } else {
+          nrow_facet = 2
+        }
+        map_ggplot <- map_ggplot + ggplot2::facet_wrap(as.formula(paste0("~", input$period)), nrow = nrow_facet )
       }
       
       if (input$variable == "total_observation"){
@@ -192,13 +199,13 @@ mod_map_birds_server <- function(id, parent_session){
         viridis::scale_fill_viridis(alpha=0.80,na.value='#f5f5f2') +
         theme_map() +
         ggplot2::guides(fill = ggplot2::guide_colourbar(direction = 'horizontal',  ## transform legend
-                                      title=variable_title,  ##rename default legend
-                                      title.position='top',
-                                      title.hjust=0.5,
-                                      ticks.colour='#f5f5f2',
-                                      ticks.linewidth=2,
-                                      barwidth = 20,
-                                      barheight = 1))
+                                                        title=variable_title,  ##rename default legend
+                                                        title.position='top',
+                                                        title.hjust=0.5,
+                                                        ticks.colour='#f5f5f2',
+                                                        ticks.linewidth=2,
+                                                        barwidth = 20,
+                                                        barheight = 1))
       
       map_ggplot
       
