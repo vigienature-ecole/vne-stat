@@ -174,12 +174,12 @@ mod_map_birds_server <- function(id, parent_session){
           )}
       
       
-      map_ggplot <- ggplot(map_to_plot) +
-        geom_sf(aes(fill = .data[[variable_to_plot]]), color = NA) +
-        geom_sf(data = mod_values$carte_france, fill = NA, lwd = 0.7)
+      map_ggplot <- ggplot2::ggplot(map_to_plot) +
+        ggplot2::geom_sf(ggplot2::aes(fill = .data[[variable_to_plot]]), color = NA) +
+        ggplot2::geom_sf(data = mod_values$carte_france, fill = NA, lwd = 0.7)
       
       if(input$period != "all"){
-        map_ggplot <- map_ggplot + facet_wrap(as.formula(paste0("~", input$period)), nrow = 2 )
+        map_ggplot <- map_ggplot + ggplot2::facet_wrap(as.formula(paste0("~", input$period)), nrow = 2 )
       }
       
       if (input$variable == "total_observation"){
@@ -189,9 +189,9 @@ mod_map_birds_server <- function(id, parent_session){
       }
       
       map_ggplot <- map_ggplot + 
-        scale_fill_viridis(alpha=0.80,na.value='#f5f5f2') +
+        viridis::scale_fill_viridis(alpha=0.80,na.value='#f5f5f2') +
         theme_map() +
-        guides(fill = guide_colourbar(direction = 'horizontal',  ## transform legend
+        ggplot2::guides(fill = ggplot2::guide_colourbar(direction = 'horizontal',  ## transform legend
                                       title=variable_title,  ##rename default legend
                                       title.position='top',
                                       title.hjust=0.5,
