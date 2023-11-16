@@ -149,28 +149,28 @@ mod_map_birds_server <- function(id, parent_session){
       
       # define theme for map (legend, remove axis, colors)
       theme_map <- function(...) {
-        theme_minimal() +
-          theme(
-            axis.text.x = element_blank(),
-            axis.text.y = element_blank(),
-            axis.ticks = element_blank(),
-            axis.title.x = element_blank(),
-            axis.title.y = element_blank(),
-            panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank(),
-            plot.title = element_text(size = 20, face = "bold",
+        ggplot2::theme_minimal() +
+          ggplot2::theme(
+            axis.text.x = ggplot2::element_blank(),
+            axis.text.y = ggplot2::element_blank(),
+            axis.ticks = ggplot2::element_blank(),
+            axis.title.x = ggplot2::element_blank(),
+            axis.title.y = ggplot2::element_blank(),
+            panel.grid.major = ggplot2::element_blank(),
+            panel.grid.minor = ggplot2::element_blank(),
+            plot.title = ggplot2::element_text(size = 20, face = "bold",
                                       hjust=0.5,family="Arial Narrow",color="gray35"),
-            plot.subtitle = element_text(size = 14,hjust=0.5,
+            plot.subtitle = ggplot2::element_text(size = 14,hjust=0.5,
                                          family="Arial Narrow",color="gray35"),
-            plot.caption = element_text(size=10,
+            plot.caption = ggplot2::element_text(size=10,
                                         family="Arial Narrow",color="gray35"),
-            strip.text.x = element_text(size=14,hjust=0.1,vjust=0, face = "bold",
+            strip.text.x = ggplot2::element_text(size=14,hjust=0.1,vjust=0, face = "bold",
                                         family="Arial Narrow",color="gray35"),
-            plot.margin = margin(0.8, 0.5, 0.5, 0.5, "cm"),
-            panel.border = element_blank(),
+            plot.margin = ggplot2::margin(0.8, 0.5, 0.5, 0.5, "cm"),
+            panel.border = ggplot2::element_blank(),
             legend.position = 'bottom',
-            legend.title = element_text(family="Arial Narrow",color="gray35"),
-            legend.text = element_text(family="Arial Narrow",color="gray35")
+            legend.title = ggplot2::element_text(family="Arial Narrow",color="gray35"),
+            legend.text = ggplot2::element_text(family="Arial Narrow",color="gray35")
           )}
       
       
