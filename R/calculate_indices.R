@@ -9,10 +9,14 @@ calculate_indices <- function(data, index, variable_group){
   # if subobservation level
   
   if (!"Nombre_individus" %in% colnames(data)){
-    data$Nombre_individus <- 1
+    if ("Nombre_contacts" %in% colnames(data)){
+      data$Nombre_individus <- data$Nombre_contacts
+    } else{
+      data$Nombre_individus <- 1
+    }
   }
   
-  if (index == "abondance"){
+  if (index == "abondance" | index == "activity"){
     # calcul abondance par observation
     biodiversity_index = data[ , .(index = sum(Nombre_individus, na.rm = TRUE)),
                                by = group_variable]
@@ -20,14 +24,14 @@ calculate_indices <- function(data, index, variable_group){
     # attention probalement pas lichen go proof !!!!
     if("Numero_quadrat" %in% colnames(data) | "placette" %in% colnames(data)){
       if("Numero_quadrat" %in% colnames(data)){
-      group <- c(group_variable, "Numero_quadrat")
+        group <- c(group_variable, "Numero_quadrat")
       } else {
         group <- c(group_variable, "placette")
       }
       biodiversity_index_subplot = data[ , .(index = length(Nombre_individus[Nombre_individus > 0])),
-                                 by = group]
+                                         by = group]
       biodiversity_index = biodiversity_index_subplot[ , .(index = mean(index)),
-                                 by = group_variable]
+                                                       by = group_variable]
     } else {
       
       biodiversity_index = data[ , .(index = length(Nombre_individus[Nombre_individus > 0])),
@@ -40,7 +44,12 @@ calculate_indices <- function(data, index, variable_group){
   
   no_group = FALSE
   if (length(group_variable) > 0){
-    if (group_variable %in% c("Latitude", "Longitude", "Longueur_rue", "Longitude_debut", "Latitude_debut")) {
+    if (group_variable %in% c("Latitude", "Longitude", 
+                              "Longueur_rue", 
+                              "Longitude_debut", "Latitude_debut", "Temperature_debut", 
+                              "Eclairage_M", "Eclairage_L",
+                              "Temperature_fin", "Proportion_artificiel", "Proportion_agricole", 
+                              "Proportion_foret_semi_naturel", "Proportion_eau", "Altitude", "Proportion_zone_humide")) {
       no_group = TRUE
     }
   }
@@ -74,6 +83,13 @@ calculate_indices <- function(data, index, variable_group){
                                        "Nombre moyen d'individus", 
                                        "Écart-type du nombre d'individus",
                                        "Intervalle de confiance")
+    } else if (index == "activity"){
+      colnames(result_manip_view) <- c(group_variable,
+                                       "Somme des contacts",
+                                       "Nombre de participations", 
+                                       "Nombre moyen de contacts", 
+                                       "Écart-type du nombre de contacts",
+                                       "Intervalle de confiance")
     } else if (index == "diversite"){
       colnames(result_manip_view) <- c(group_variable,
                                        "Somme du nombre d'espèces",
@@ -89,12 +105,17 @@ calculate_indices <- function(data, index, variable_group){
                                        "Nombre de sessions d'observation")
     }
   } else {
+
     result_manip <- biodiversity_index
     result_manip_view = result_manip
     if (index == "abondance"){
       colnames(result_manip_view) <- c("Numero_observation",
                                        group_variable,
                                        "Nombre d'individus")
+    } else if (index == "activity"){
+      colnames(result_manip_view) <- c("Numero_observation",
+                                       group_variable,
+                                       "Nombre de contact")
     } else if (index == "diversite"){
       colnames(result_manip_view) <- c("Numero_observation",
                                        group_variable,

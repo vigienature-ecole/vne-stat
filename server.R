@@ -61,9 +61,9 @@ function(input, output, session) {
   # import and store dataset
   
   observeEvent(input$import, {
-    cat("Choose dataset\n")
     
-    if(input$import != "Choisir un jeu de données"){ 
+    cat("Choose dataset\n")
+    if(input$import != "Choisir un jeu de données"){
       show("view_raw_data")
       show("manipulate")
       current_dataset_name = input$import
@@ -106,7 +106,8 @@ function(input, output, session) {
       show("view_res_manip")
     }
     
-    if(input$manipulate %in% c("diversite", "nombre_obs", "abondance")){ 
+    if(input$manipulate %in% c("diversite", "nombre_obs", "abondance", "activity")){ 
+    
       show("variable_group")
       current_dataset_name = input$import
       variable_information <- app_config[app_config$type == "variable" & app_config[[current_dataset_name]]]
@@ -117,14 +118,14 @@ function(input, output, session) {
       hide("variable_group")
     }
     
-    if(input$manipulate == "abondance"){
+    if(input$manipulate == "abondance" | input$manipulate == "activity"){
       show("species_filter")
       updateSelectInput(session, "species_filter", choices = c("Choisir une espèce", sort(unique(app_values$current_dataset$Espece))))
     } else {
       hide("species_filter")
     }
     
-    if(input$manipulate %in% c("diversite", "nombre_obs", "abondance", "nombre_especes")){
+    if(input$manipulate %in% c("diversite", "nombre_obs", "abondance", "nombre_especes", "activity")){
       show("variable_filter")
       updateSelectInput(session, "variable_filter", choices = c("Choisir une variable", sort(colnames(app_values$current_dataset)[!colnames(app_values$current_dataset) %in% c("Numero_observation", "Espece", "Nombre_individus")])))
     } else {
@@ -141,6 +142,7 @@ function(input, output, session) {
   })
   
   observeEvent(input$variable_filter, {
+    cat("filter with variable")
     if(input$variable_filter != "Choisir une variable"){
       if(input$variable_filter %in% unique(app_values$current_dataset[,..input$variable_filter])){
         show("variable_level")
@@ -224,10 +226,10 @@ function(input, output, session) {
       
       # filter dataset
       
-      if(input$manipulate == "abondance" | input$manipulate == "diversite" | input$manipulate == "nombre_obs"){
+      if(input$manipulate == "abondance" | input$manipulate == "diversite" | input$manipulate == "nombre_obs" | input$manipulate == "activity"){
         
         
-        if (input$manipulate == "abondance" & input$species_filter != "Choisir une espèce"){
+        if ((input$manipulate == "activity" | input$manipulate == "abondance") & input$species_filter != "Choisir une espèce"){
           current_dataset <- current_dataset[Espece == input$species_filter]
         } else {
           current_dataset <- current_dataset
@@ -242,6 +244,8 @@ function(input, output, session) {
         
         if (input$import == "sauvages"){
           current_dataset$Nombre_individus <- 1
+        } else if(input$import == "chiro"){
+          current_dataset$Nombre_individus <- current_dataset$Nombre_contacts
         }
         
         results_manip = current_dataset[ , .(index = length(Nombre_individus[Nombre_individus > 0])),
@@ -277,7 +281,7 @@ function(input, output, session) {
   })
   
   output$title_graph <- renderText({
-    if(input$manipulate == "abondance" | input$manipulate == "diversite" | input$manipulate == "nombre_obs"){
+    if(input$manipulate == "abondance" | input$manipulate == "diversite" | input$manipulate == "nombre_obs" | input$manipulate == "activity"){
       title_graph <- app_config$label[app_config$valeur == input$manipulate]
       
       if (input$variable_group != "Choisir une variable") {
@@ -286,7 +290,7 @@ function(input, output, session) {
                              app_config$label[app_config$valeur == input$variable_group])
       }
       
-      if (input$manipulate == "abondance" & input$species_filter != "Choisir une espèce") {
+      if ((input$manipulate == "activity" | input$manipulate == "abondance") & input$species_filter != "Choisir une espèce") {
         title_graph <- paste(title_graph,
                              "pour l'espèce",
                              input$species_filter)

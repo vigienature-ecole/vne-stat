@@ -1,10 +1,11 @@
 make_graph <- function(data_to_plot, variable_group, variable_info, current_dataset_name, index_type){
-  
   # get variable information
   library(ggplot2)
   #mettre en place le titre de l'axe des x
   if(index_type == "abondance") {
     y_label = "Nombre moyen\nd'individus"
+  } else if(index_type == "activity") {
+    y_label = "Nombre moyen\nde contacts"
   } else if (index_type == "diversite") {
     y_label = "Nombre moyen\nd'espèces"
   } else if (index_type == "nombre_especes") {
@@ -43,12 +44,14 @@ make_graph <- function(data_to_plot, variable_group, variable_info, current_data
     
     #limitation du nombre de catégories
     
-    if (variable_info$variable_type  == "quali" & nrow(data_to_plot) > 30){
+    if (variable_info$variable_type  == "quali" & nrow(data_to_plot) > 30) {
       data_to_plot <- data_to_plot[order(-index)][1:30]
     }
     
     x_label = variable_info$label
-    data_to_plot <- remove_begining_categories(data_to_plot, variable_group)
+    if(any(grepl("_", data_to_plot[[variable_group]]))) {
+      data_to_plot <- remove_begining_categories(data_to_plot, variable_group)
+    }
     
     #mise en place du mapping
     if(variable_info$variable_order == "value"){
@@ -84,9 +87,15 @@ make_graph <- function(data_to_plot, variable_group, variable_info, current_data
         graph = graph + error_bars
       }
     } else if (variable_info$variable_type == "quanti_points"){
-      graph <- graph + 
-        geom_point() +
-        geom_smooth()
+      if(index_type == "activity") {
+        graph <- graph + 
+          geom_smooth()
+      } else {
+        graph <- graph + 
+          geom_point() +
+          geom_smooth()
+      }
+      
       if ("erreur_marginale" %in% colnames(data_to_plot)) {
         graph = graph + error_bars
       }
