@@ -34,7 +34,7 @@ make_graph <- function(data_to_plot, variable_group, variable_info, current_data
     
     ## Gestion des mois ----
     if (variable_group == "Mois") {
-      data_to_plot$Mois <- label_mounth(data_to_plot$Mois, short = TRUE, numbered_school_year = TRUE)
+      data_to_plot$Mois <- label_month(data_to_plot$Mois, short = TRUE, numbered_school_year = TRUE)
       # remove july and august
       if (current_dataset_name != "Spipoll"){
         data_to_plot <- data_to_plot[!Mois %in% c("12_Août", "11_Juil")]
