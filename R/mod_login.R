@@ -56,12 +56,14 @@ mod_login_server <- function(id, parent_session){
         #Create a unique file name
         fileName <- sprintf("%s_%s.csv", as.integer(Sys.time()), digest::digest(data))
         cat("write login information")
+        dir.create("data/data_users_temp")
         # Write the file to the local system
         write.csv(
           data.frame(type_login = input$type_login,
                      type_precis_login = input$type_precis_login,
-                     utilisation_detail = input$utilisation_detail),
-          file = file.path("data", fileName), 
+                     utilisation_detail = input$utilisation_detail,
+                     time = Sys.time()),
+          file = file.path("data/data_users_temp", fileName), 
           row.names = FALSE, quote = TRUE
         )
         
