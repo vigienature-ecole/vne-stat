@@ -61,7 +61,7 @@ mod_network_biolit_server <- function(id, parent_session){
     )
     
     observeEvent(input$taxon_select_animal, {
-      cat("change insect filter\n")
+      cat("change animal filter\n")
       mod_values$filter_change = mod_values$filter_change + 1
     })
     
@@ -77,14 +77,14 @@ mod_network_biolit_server <- function(id, parent_session){
       if(!is.null(input$taxon_select_algue)){
         if (length(input$taxon_select_algue) > 1) {
           cat("effective filtering plant\n")
-          current_filtered_taxon_network <- subset(current_filtered_taxon_network, dplyr::pull(current_filtered_taxon_network[, input$taxon_depth_plant]) %in% input$taxon_select_algue)
+          current_filtered_taxon_network <- subset(current_filtered_taxon_network, dplyr::pull(current_filtered_taxon_network[, "Ceinture_algue"]) %in% input$taxon_select_algue)
         }
       }
       
       if(!is.null(input$taxon_select_animal)){
         if (length(input$taxon_select_animal) > 1) {
-          cat("effective filtering insect\n")
-          current_filtered_taxon_network <- subset(current_filtered_taxon_network, dplyr::pull(current_filtered_taxon_network[, input$taxon_depth_insect]) %in% input$taxon_select_animal)
+          cat("effective filtering bigorneau\n")
+          current_filtered_taxon_network <- subset(current_filtered_taxon_network, dplyr::pull(current_filtered_taxon_network[, "Espece"]) %in% input$taxon_select_animal)
         }
       }
       updateSliderInput(session, "max_interactions",
@@ -109,7 +109,7 @@ mod_network_biolit_server <- function(id, parent_session){
 
       
       
-      current_filtered_taxon_network <- mod_values$current_full_network 
+      current_filtered_taxon_network <- filtered_network_max_interactions()
       
       
       
