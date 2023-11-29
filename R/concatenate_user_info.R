@@ -12,4 +12,4 @@ if ("user_data.csv" %in% list.files("data")){
 
 
 readr::write_csv(data_all, "data/user_data.csv")
-#file.remove(list_all_files)
+file.remove(list_all_files)
