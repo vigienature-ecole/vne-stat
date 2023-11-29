@@ -1,3 +1,5 @@
+if (FALSE){
+
 # read and give stats on VNE
 list_all_files <- paste0("data/",list.files("data", pattern = "5a9")) 
 data_all <- list_all_files |>
@@ -13,3 +15,4 @@ if ("user_data.csv" %in% list.files("data")){
 
 readr::write_csv(data_all, "data/user_data.csv")
 file.remove(list_all_files)
+}
