@@ -10,9 +10,10 @@ data_all <- list_all_files %>%
 
 if ("user_data.csv" %in% list.files("data")){
   data_user <- read.csv("data/user_data.csv")
+  data_all <- bind_rows(data_user, data_all)
 }
 
-data_all <- bind_rows(data_user, data_all)
+
 
 write_csv(data_all, "data/user_data.csv")
 #file.remove(list_all_files)
