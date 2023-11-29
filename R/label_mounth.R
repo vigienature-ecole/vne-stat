@@ -1,5 +1,5 @@
 # label each mounth with the name in French
-label_mounth <- function(x){
+label_mounth <- function(x,short = TRUE, numbered_school_year = TRUE){
   label = hutils::Switch(as.character(x), DEFAULT = "Non Déterminé",
                          "1" = "01_Janvier", 
                          "2" = "02_Février", 
