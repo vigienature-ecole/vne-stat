@@ -5,7 +5,7 @@ mod_login_ui <- function(id) {
   ns <- NS(id)
   tagList(
     column(
-      h2("Bienvenue dans l'interface d'analyse de données de Vigie-Nature École"),
+      h2("Bienvenue sur l'outil statistique de Vigie-Nature École"),
       br(),
       style='min-height:500px; border: 10px solid white; padding: 10px; border-radius: 20px; background: #DDEDDD', width = 6, align="center", offset = 3,
       selectInput(ns("type_login"), "Vous êtes :", c("Choisir une catégorie", "Enseignant ou enseignante", "Élève", "Étudiant ou étudiante", "Chercheuse ou chercheur", "Équipe VNE", "Autre")),
