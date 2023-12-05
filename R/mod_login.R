@@ -9,7 +9,7 @@ mod_login_ui <- function(id) {
       br(),
       style='min-height:500px; border: 10px solid white; padding: 10px; border-radius: 20px; background: #DDEDDD', width = 6, align="center", offset = 3,
       selectInput(ns("type_login"), "Vous êtes :", c("Choisir une catégorie", "Enseignant ou enseignante", "Élève", "Étudiant ou étudiante", "Chercheuse ou chercheur", "Équipe VNE", "Autre")),
-      textInput(ns("type_precis_login"), "Présisez (facultatif sauf si choix autre)"),
+      textInput(ns("type_precis_login"), "Précisez (facultatif sauf si choix autre)"),
       textInput(ns("utilisation_detail"), "Dites nous pourquoi vous utilisez cette application (facultatif)"),
       htmlOutput(ns("error"))  %>% 
         tagAppendAttributes(style = 'color:red;font-weight: bolder;'),
@@ -46,7 +46,7 @@ mod_login_server <- function(id, parent_session){
       output$error <- renderText(
         ifelse(error, 
                paste("Impossible de passer à l'étape suivante : pour continuer, vous devez :", text_error),
-               NULL
+               ""
         )
       )
       
@@ -56,7 +56,10 @@ mod_login_server <- function(id, parent_session){
         #Create a unique file name
         fileName <- sprintf("%s_%s.csv", as.integer(Sys.time()), digest::digest(data))
         cat("write login information")
-        dir.create("data/data_users_temp")
+        if (!"data/data_users_temp" %in% list.dirs("data")) {
+          dir.create("data/data_users_temp")
+        }
+        
         # Write the file to the local system
         write.csv(
           data.frame(type_login = input$type_login,
@@ -66,7 +69,7 @@ mod_login_server <- function(id, parent_session){
           file = file.path("data/data_users_temp", fileName), 
           row.names = FALSE, quote = TRUE
         )
-        
+        cat("\ndata saved")
         # go to input page
         updateTabsetPanel(session = parent_session, "vne_stats",
                           selected = "input")
