@@ -56,9 +56,9 @@ ids,type,with_variable,oiseaux,vdt,escargots,spipoll,sauvages,biolit,alamer,chir
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,quali,name,FALSE,Pourcentage_recouvrement_algues,Pourcentage recouvrement en algues,
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,quali,name,FALSE,Pourcentage_recouvrement_balanes,Pourcentage recouvrement en balanes,
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,quali,name,FALSE,Pourcentage_recouvrement_moules,Pourcentage recouvrement en moules,
-,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,quali,name,FALSE,Presence_algues_rouges,Présence d’algues rouges,
-,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,quali,name,FALSE,Presence_algues_vertes,Présence d’algues vertes,
-,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,quali,name,FALSE,Diversite_algues_brunes,Diversité en algues brunes,
+,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,quali,name,FALSE,Presence_algues_rouges,Présence d’algues rouges,
+,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,quali,name,FALSE,Presence_algues_vertes,Présence d’algues vertes,
+,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,quali,name,FALSE,Diversite_algues_brunes,Diversité en algues brunes,
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,quali,name,FALSE,Diversite_algues,Diversité en algues,
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,quali,name,FALSE,Presence_roche_nue,Présence de roche nue,
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,quali,name,FALSE,Nombre_habitats,Nombre d’habitats dans lesquels des plantes ont été trouvées,
@@ -89,3 +89,5 @@ ids,type,with_variable,oiseaux,vdt,escargots,spipoll,sauvages,biolit,alamer,chir
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,quanti_points,name,NA,Proportion_eau,Proportion surface en eau,
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,quanti_points,name,NA,Altitude,Altitude,
 13,operation,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,NA,NA,NA,activity,Nombre moyen de contacts,Cette option additionne le nombre de contact pour chaque observation puis réalise une moyenne.
+,operation,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,NA,name,NA,map_insects,Étudier la répartition des espèces,
+,variable,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,quali,name,FALSE,Saison,Saison,
