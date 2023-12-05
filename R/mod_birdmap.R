@@ -4,22 +4,15 @@ mod_map_birds_ui <- function(id) {
     column(
       style='min-height:500px; border: 10px solid white; padding: 10px; border-radius: 20px; background: #DDEDDD', width = 4, align="center",
       h3("Paramètres de la carte"),
-      selectInput(ns("map_type"), "Choix du type de carte", choices = setNames(c("carte_grille_100km",
-                                                                                 "carte_grille_50km",
-                                                                                 "carte_grille_25km",
+      selectInput(ns("map_type"), "Choix du type de carte", choices = setNames(c("carte_grille_50km",
                                                                                  "carte_grille_10km",
-                                                                                 "carte_academie",
                                                                                  "carte_departement",
-                                                                                 "carte_region",
-                                                                                 "carte_france"),
-                                                                               c("Grille de 100km x 100km",
-                                                                                 "Grille de 50km x 50km",
-                                                                                 "Grille de 25km x 25km",
+                                                                                 "carte_region"
+                                                                               ),
+                                                                               c("Grille de 50km x 50km",
                                                                                  "Grille de 10km x 10km",
-                                                                                 "Carte par academie",
                                                                                  "Carte par departement",
-                                                                                 "Carte par region",
-                                                                                 "Carte de la france"))),
+                                                                                 "Carte par region"))),
       selectInput(ns("variable"), "Choix de la variable à représenter", choices = setNames(c(
         "frequence_observation",
         "total_observation"
