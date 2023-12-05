@@ -1,0 +1,218 @@
+mod_map_insects_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+    column(
+      style='min-height:500px; border: 10px solid white; padding: 10px; border-radius: 20px; background: #DDEDDD', width = 4, align="center",
+      h3("Paramètres de la carte"),
+      selectInput(ns("map_type"), "Choix du type de carte", choices = setNames(c("carte_grille_50km",
+                                                                                 "carte_grille_10km",
+                                                                                 "carte_departement",
+                                                                                 "carte_region"),
+                                                                               c(
+                                                                                 "Grille de 50km x 50km",
+                                                                                 "Grille de 10km x 10km",
+                                                                                 "Carte par departement",
+                                                                                 "Carte par region"))),
+      selectInput(ns("variable"), "Choix de la variable à représenter", choices = setNames(c(
+        "frequence_observation",
+        "total_observation"
+      ), c(
+        "Frequence d'observation de l'espèce",
+        "Total des observations"
+      )
+      )),
+      selectInput(ns("period"), "Choix de la période à représenter", choices = setNames(c(
+        "all",
+        "mois",
+        "saison"), c(
+          "Toute l'année",
+          "Par mois",
+          "Par saison")
+      )),
+      
+      
+      selectInput(ns("espece_focale"), "Choix de l'espèce à représenter", choices = sort(c( "Abeille mellifère", "Abeilles Hylaeus à taches blanches",
+                                                                                            "Andrènes difficiles à déterminer", "Bourdons à pilosité fauve à grise",
+                                                                                            "Bourdons noirs à bande(s) jaune(s) et cul blanc", "Empidides",
+                                                                                            "Eristales (autres)", "Fourmis à pétiole simple",
+                                                                                            "Halictes (femelles)", "Halictes (mâles)",
+                                                                                            "Ichneumons et autres", "Mirides",
+                                                                                            "Mouches à damier", "Mouches aux reflets métalliques",
+                                                                                            "Mouches difficiles à déterminer", "Moustiques, Tipules et autres diptères Nématocères",
+                                                                                            "Nitidulides", "Oedemères verts",
+                                                                                            "Punaises difficiles à déterminer", "Sauterelles",
+                                                                                            "Syrphe ceinturé", "Syrphes difficiles à déterminer",
+                                                                                            "Syrphes Sphaerophoria (femelle)", "Tachinaires difficiles à déterminer"   ))),
+      sliderInput(ns("min_obs"),
+                  "Nombre minimum d'observation pour représentation",
+                  min = 0,
+                  max = 300,
+                  value = 5)
+    ),
+    column( width = 8,
+            htmlOutput(ns("title"))%>% 
+              tagAppendAttributes(style = 'color:#ff6666;font-weight: bolder;font-size: x-large;'),
+            uiOutput(ns("bird_image")),
+            
+            # ),
+            div(
+              plotOutput(ns("map"), height = '600px' )
+            )
+            
+    )
+  )
+}
+
+
+mod_map_insects_server <- function(id, parent_session){
+  moduleServer(id, function(input, output, session){
+    ns <- session$ns
+    # Variables for module
+    mod_values <- reactiveValues(
+      maps = readRDS("../../datasets/papers/map_data_insects.rds"),
+      carte_france = sf::read_sf("../../datasets/maps/metropole-version-simplifiee.geojson")
+    )
+    
+    observeEvent(input$variable,{
+      if (input$variable == "total_observation"){
+        hide("espece_focale")
+      } else {
+        show("espece_focale")
+      }
+    })
+    
+    output$map <- renderPlot({
+      # select map
+      map_to_plot <- mod_values$maps[[input$map_type]][[input$period]]
+      
+      if (input$variable == "total_observation"){
+        variable_to_plot = "total_observation"
+      } else {
+        variable_to_plot = paste0("frequence_observation_", input$espece_focale)
+      }
+      
+      
+      # valeur minimale à représenter
+      map_to_plot <- map_to_plot |>
+        dplyr::filter(total_observation > input$min_obs)
+      
+      # change month from num to letters
+      if(input$period == "mois"){
+        map_to_plot$mois <- label_mounth(map_to_plot$mois)
+      }
+      
+      # define theme for map (legend, remove axis, colors)
+      theme_map <- function(...) {
+        ggplot2::theme_minimal() +
+          ggplot2::theme(
+            axis.text.x = ggplot2::element_blank(),
+            axis.text.y = ggplot2::element_blank(),
+            axis.ticks = ggplot2::element_blank(),
+            axis.title.x = ggplot2::element_blank(),
+            axis.title.y = ggplot2::element_blank(),
+            panel.grid.major = ggplot2::element_blank(),
+            panel.grid.minor = ggplot2::element_blank(),
+            plot.title = ggplot2::element_text(size = 20, face = "bold",
+                                               hjust=0.5,family="Arial Narrow",color="gray35"),
+            plot.subtitle = ggplot2::element_text(size = 16,hjust=0.5,
+                                                  family="Arial Narrow",color="gray35"),
+            plot.caption = ggplot2::element_text(size=10,
+                                                 family="Arial Narrow",color="gray35"),
+            strip.text.x = ggplot2::element_text(size=14,hjust=0.1,vjust=0, face = "bold",
+                                                 family="Arial Narrow",color="gray35"),
+            plot.margin = ggplot2::margin(0.8, 0.5, 0.5, 0.5, "cm"),
+            panel.border = ggplot2::element_blank(),
+            legend.position = 'bottom',
+            legend.title = ggplot2::element_text(size=14, family="Arial Narrow",color="gray35"),
+            legend.text = ggplot2::element_text(size=14, family="Arial Narrow",color="gray35")
+          )}
+      
+      
+      map_ggplot <- ggplot2::ggplot(map_to_plot) +
+        ggplot2::geom_sf(ggplot2::aes(fill = .data[[variable_to_plot]]), color = NA) +
+        ggplot2::geom_sf(data = mod_values$carte_france, fill = NA, lwd = 0.7)
+      
+      if(input$period != "all"){
+        if (input$period == "saison"){
+          nrow_facet = 1
+        } else {
+          nrow_facet = 2
+        }
+        map_ggplot <- map_ggplot + ggplot2::facet_wrap(as.formula(paste0("~", input$period)), nrow = nrow_facet )
+      }
+      
+      if (input$variable == "total_observation"){
+        variable_title = "Total des observations"
+      } else {
+        variable_title = paste("Fréquence d'observation de l'espèce : ", input$espece_focale)
+      }
+      
+      map_ggplot <- map_ggplot + 
+        viridis::scale_fill_viridis(alpha=0.80,na.value='#f5f5f2') +
+        theme_map() +
+        ggplot2::guides(fill = ggplot2::guide_colourbar(direction = 'horizontal',  ## transform legend
+                                                        title=variable_title,  ##rename default legend
+                                                        title.position='top',
+                                                        title.hjust=0.5,
+                                                        ticks.colour='#f5f5f2',
+                                                        ticks.linewidth=2,
+                                                        barwidth = 20,
+                                                        barheight = 1))
+      
+      map_ggplot
+      
+      
+      # # carte à réaliser
+      # observation_map <- tmap::tm_shape(mod_values$carte_france) +  
+      #   tmap::tm_borders()
+      # 
+      # 
+      # observation_map <-  observation_map + 
+      #   tmap::tm_shape(map_to_plot) +  
+      #   tmap::tm_fill(col = variable_to_plot, n = 10) 
+      # 
+      # if(input$period != "all"){
+      #   observation_map <- observation_map + tmap::tm_facets(by = input$period, free.coords = FALSE)
+      # } 
+      # 
+      # observation_map <- observation_map +
+      #   tmap::tm_shape(mod_values$carte_france) +  
+      #   tmap::tm_borders() +
+      #   tmap::tm_layout(frame = FALSE, legend.outside = TRUE, frame.lwd = NA, panel.label.bg.color = NA, panel.label.size = 2)
+      # 
+      # observation_map
+    })
+    
+    output$title <- renderText({
+      if (input$variable == "total_observation"){
+        "Total des observations"
+      } else {
+        paste("Fréquence d'observation de l'espèce : ", input$espece_focale)
+      }
+    })
+    
+    output$bird_image <- renderUI({
+      if (input$variable == "total_observation"){
+        NULL
+      } else {
+        tags$img(src = paste0("https://depot.vigienature-ecole.fr/restits/Bilan/2020/img/vignettes_oiseaux/", 
+                              stringr::str_to_title(
+                                iconv(
+                                  gsub("-", "_", 
+                                       gsub("'", "_", 
+                                            gsub(" ", "_", input$espece_focale)))
+                                  ,from="UTF-8",to="ASCII//TRANSLIT")
+                              )
+                              ,"_1.jpg")
+                 
+                 , height = "150px"
+        )
+      }
+    })
+    
+    
+    
+  })
+}
+
+
