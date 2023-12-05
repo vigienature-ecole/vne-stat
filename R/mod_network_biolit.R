@@ -75,14 +75,14 @@ mod_network_biolit_server <- function(id, parent_session){
       current_filtered_taxon_network <- mod_values$interactions
       
       if(!is.null(input$taxon_select_algue)){
-        if (length(input$taxon_select_algue) > 1) {
+        if (length(input$taxon_select_algue) > 0) {
           cat("effective filtering plant\n")
           current_filtered_taxon_network <- subset(current_filtered_taxon_network, dplyr::pull(current_filtered_taxon_network[, "Ceinture_algue"]) %in% input$taxon_select_algue)
         }
       }
       
       if(!is.null(input$taxon_select_animal)){
-        if (length(input$taxon_select_animal) > 1) {
+        if (length(input$taxon_select_animal) > 0) {
           cat("effective filtering bigorneau\n")
           current_filtered_taxon_network <- subset(current_filtered_taxon_network, dplyr::pull(current_filtered_taxon_network[, "Espece"]) %in% input$taxon_select_animal)
         }
