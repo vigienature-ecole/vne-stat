@@ -15,18 +15,18 @@ mod_network_ui <- function(id) {
       ),
       style='min-height:500px; border: 10px solid white; padding: 10px; border-radius: 20px; background: #DDEDDD', width = 4, align="center",
       h3("Paramètres de la représentation du réseau"),
-      selectInput(ns("taxon_depth_insect"), "Niveau taxonomique des insectes (et autres organismes floricoles)", choices = setNames(c("Ordre", "Espece"), c("Ordres d'insecte", "Espèces d'insecte"))),
-      selectInput(ns("taxon_depth_plant"), "Niveau taxonomique des plantes", choices = setNames(c("Famille_plante", "Plante"), c("Familles de plante", "Espèces de plante"))),
-      selectizeInput(ns("taxon_select_insect"), "Sélectionner des insectes (au moins deux)", choices = "", multiple = TRUE, options = NULL),
-      helpText("Si laissé vide, alors tous les insectes sont affichés (selon le nombre d'intéraction minimum), cela permet de faire des comparaisons précises ou de regarder des réseaux plus simples"),
-      selectizeInput(ns("taxon_select_plant"), "Sélectionner des plantes (au moins deux)", choices = "", multiple = TRUE, options = NULL),
+      selectInput(ns("taxon_depth_insect"), "Niveau taxonomique des insectes et araignées", choices = setNames(c("Ordre", "Espece"), c("Grands groupes d'insectes et araignées", "Espèces d'insectes et araignées"))),
+      selectInput(ns("taxon_depth_plant"), "Niveau taxonomique des plantes", choices = setNames(c("Famille_plante", "Plante"), c("Grands groupes de plantes (Familles)", "Espèces de plantes"))),
+      selectizeInput(ns("taxon_select_insect"), "Sélectionner des insectes et araignées", choices = "", multiple = TRUE, options = NULL),
+      helpText("Si laissé vide, alors tous les insectes et/ou araignées sont affichés (selon le nombre d'intéraction minimum), cela permet de faire des comparaisons précises ou de regarder des réseaux plus simples"),
+      selectizeInput(ns("taxon_select_plant"), "Sélectionner des plantes", choices = "", multiple = TRUE, options = NULL),
       helpText("Si laissé vide, alors toutes les plantes sont affichées (selon le nombre d'intéraction minimum), cela permet de faire des comparaisons précises ou de regarder des réseaux plus simples"),
       sliderInput(ns("max_interactions"),
                   "Nombre d'interactions représentées",
                   min = 2,
                   max = 3000,
                   value = 50),
-      helpText("Ce champ permet de choisir le nombre d'intéractions représentées. Cela permet de réduire la complexité du réseau mais biaise les données pour les taxons les plus abondants. Vous pouvez utiliser les filtres par espèces pour regarder les taxons plus rares."),
+      helpText("Ce champ permet de choisir le nombre d'intéractions représentées. Cela permet de réduire la complexité du réseau mais biaise les données pour les organismes les plus abondants. Vous pouvez utiliser les filtres par espèces pour regarder les organismes plus rares."),
       checkboxInput(ns("normalise_interactions_plant"), label = "Normaliser les intéractions selon les plantes", value = TRUE),
       helpText("Si l'on utilise cette option, le nombre d'intéractions est divisé par le nombre total d'intéractions observées sur cette plante. Attention certaines plantes (comme le Lierre grimpant ou la carotte sauvage sont très représentés tandis que d'autres n'ont été vues qu'une seule fois) ce qui peut biaiser les résultats.")
       
@@ -50,6 +50,7 @@ mod_network_server <- function(id, parent_session){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     # Variables for module
+    cat("start init data and values for insect network")
     mod_values <- reactiveValues(
       taxon_change = 1,
       filter_change = 1,
@@ -61,6 +62,7 @@ mod_network_server <- function(id, parent_session){
       current_filtered_taxon_network_max = NULL,
       interaction_matrix = NULL
     )
+    cat("    ok\n")
     
     observeEvent(input$taxon_depth_insect, {
       cat("change insect taxo\n")
@@ -99,14 +101,14 @@ mod_network_server <- function(id, parent_session){
       current_filtered_taxon_network <- mod_values$current_full_network
       
       if(!is.null(input$taxon_select_plant)){
-        if (length(input$taxon_select_plant) > 1) {
+        if (length(input$taxon_select_plant) > 0) {
           cat("effective filtering plant\n")
           current_filtered_taxon_network <- subset(current_filtered_taxon_network, dplyr::pull(current_filtered_taxon_network[, input$taxon_depth_plant]) %in% input$taxon_select_plant)
         }
       }
       
       if(!is.null(input$taxon_select_insect)){
-        if (length(input$taxon_select_insect) > 1) {
+        if (length(input$taxon_select_insect) > 0) {
           cat("effective filtering insect\n")
           current_filtered_taxon_network <- subset(current_filtered_taxon_network, dplyr::pull(current_filtered_taxon_network[, input$taxon_depth_insect]) %in% input$taxon_select_insect)
         }
@@ -266,7 +268,7 @@ mod_network_server <- function(id, parent_session){
       
       output$plant_title <- renderText({
         if (input$taxon_depth_plant == "Famille_plante"){
-          "Familles de plante"
+          "Grand groupes (Familles) de plante"
         } else {
           "Espèces de plante"
         }
@@ -274,9 +276,9 @@ mod_network_server <- function(id, parent_session){
       
       output$insect_title <- renderText({      
         if (input$taxon_depth_insect == "Ordre"){
-          "Ordre d'insectes"
+          "Ordre d'insectes et araignées"
         } else {
-          "Morphogroupe d'insectes"
+          "Espèces et groupe d'insectes et araignées"
         }
       })
       
