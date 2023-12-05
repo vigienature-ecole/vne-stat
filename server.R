@@ -7,26 +7,30 @@
 #    http://shiny.rstudio.com/
 #
 
+# load packages
 library(shiny)
 library(shinyjs)
 
+# load the app_config file (datasets, operation and variable to be used within the application)
 app_config = data.table::fread("data/app_config.csv")
 app_config <- app_config[order(app_config$label), ]
 
+# get the protocol names and load them
 protocole_names <- app_config[type == "data"]$valeur
 data_values <- purrr::map(paste0("../../datasets/papers/", protocole_names, ".csv"), data.table::fread)
 names(data_values) <- protocole_names
 
-# Define server logic required to draw a histogram
+# Define server logic
 function(input, output, session) {
   
   # app starts ----
   
-  # init module
+  # init all modules
   mod_login_server("login", parent_session = session)
   mod_network_server("reseaux", parent_session = session)
   mod_network_biolit_server("reseaux_biolit", parent_session = session)
   mod_map_birds_server("map_birds", parent_session = session)
+  mod_map_insects_server("map_insects", parent_session = session)
   
   # hide elements when app starts
   hide("view_raw_data")
@@ -39,7 +43,7 @@ function(input, output, session) {
   hide("visualize")
   hide("view_res_visu")
   
-  # app_values
+  # define app_values
   app_values <- reactiveValues(
     open_panel = NULL,
     start_analysis = FALSE,
@@ -66,15 +70,19 @@ function(input, output, session) {
     if(input$import != "Choisir un jeu de données"){
       show("view_raw_data")
       show("manipulate")
+      # get name of current dataset
       current_dataset_name = input$import
+      # get information on the dataset
       app_values$current_dataset <- data_values[[input$import]]
       dataset_info <- app_config[type == "operation" & app_config[[current_dataset_name]]]
+      # populate with the operation that are related to the current dataset
       updateSelectInput(session, 
                         "manipulate", 
                         choices = c("Choisir une opération", setNames(dataset_info$valeur, 
                                                                       dataset_info$label)))
       
     } else {
+      # if the dataset is not selected, hide all
       hide("view_raw_data")
       hide("manipulate")
       hide("variable_filter")
@@ -85,6 +93,7 @@ function(input, output, session) {
     }
   })
   
+  # make sure variable filter is hidden
   hide("variable_filter")
   # when manipulation is selected ----
   # show button to access to result (table)
@@ -93,14 +102,13 @@ function(input, output, session) {
   observeEvent(input$manipulate, {
     cat("Choose operation :\n")
     if (input$manipulate != "Choisir une opération" ){
-      
       show("view_res_visu")
     } else {
       hide("view_res_visu")
     }
     
     
-    if(input$manipulate %in% c("Choisir une opération","reseau", "map_birds")){ 
+    if(input$manipulate %in% c("Choisir une opération","reseau", "map_birds", "maps_insects")){ 
       hide("view_res_manip")
     } else {
       show("view_res_manip")
@@ -134,7 +142,7 @@ function(input, output, session) {
     
     if(input$manipulate == "reseau") {
       output$help_manip <- renderText("Le résultat de l'outil de visualisation de réseaux n'est disponible que dans l'onglet visualisation")
-    } else if (input$manipulate == "map_birds"){
+    } else if (input$manipulate == "map_birds" | input$manipulate == "map_insects" ){
       output$help_manip <- renderText("Le résultat de l'outil de visualisation de carte n'est disponible que dans l'onglet visualisation")
     } else {
       output$help_manip <- NULL
@@ -144,6 +152,7 @@ function(input, output, session) {
   observeEvent(input$variable_filter, {
     cat("filter with variable")
     if(input$variable_filter != "Choisir une variable"){
+      cat(" active")
       if(input$variable_filter %in% unique(app_values$current_dataset[,..input$variable_filter])){
         show("variable_level")
         output$help_level <- renderText("Maintenant que vous avez choisi la variable à utiliser, il vous faut choisir la valeur de cette variable pour laquelle le tri sera effectué")
@@ -154,6 +163,7 @@ function(input, output, session) {
         shinyjs::reset("variable_level")
       }
     } else {
+      cat(" inactive")
       hide("variable_level")
       output$help_level <- NULL
       shinyjs::reset("variable_level")
@@ -184,10 +194,13 @@ function(input, output, session) {
         updateTabsetPanel(session, "vne_stats",
                           selected = "reseau")
       }
-      
+     
     } else if(input$manipulate == "map_birds") {
       updateTabsetPanel(session, "vne_stats",
                         selected = "map_birds")
+    } else if(input$manipulate == "map_insects") {
+      updateTabsetPanel(session, "vne_stats",
+                        selected = "map_insects")
     } else {
       app_values$start_analysis <- TRUE
       app_values$open_panel <- "Visualisation"
@@ -219,6 +232,8 @@ function(input, output, session) {
           current_dataset <- app_values$current_dataset[values_to_filter, ]
         } else {
           # add error !!!!!
+          current_dataset <- app_values$current_dataset
+          output$filter_error <- "Attention le filtre n'a pas été mis en place car aucune valeur de catégorie n'a été sélectionnée"
         }
       } else {
         current_dataset <- app_values$current_dataset
@@ -258,7 +273,6 @@ function(input, output, session) {
         
       } else {
         app_values$result_manip_view <- NULL
-        output$error_manip <- renderText("Vous n'avez pas encore sélectionné d'opération à effectuer. Vous pouvez utiliser le menu déroulant de l'étape 2 pour en choisir une.")
       }
       
       # mettre ailleur ?
@@ -277,6 +291,8 @@ function(input, output, session) {
         output$visu_graph_output <- renderPlot({graph}, height = 500)
       }
       
+    } else {
+      cat("\nanalysis waiting")
     }
   })
   
@@ -330,6 +346,14 @@ function(input, output, session) {
     app_values$return_to_input <- TRUE
   })
   
+  
+  observeEvent(input$new_analysis_top_map_insects, {
+    app_values$return_to_input <- TRUE
+  })
+  
+  observeEvent(input$new_analysis_top_network_biolit, {
+    app_values$return_to_input <- TRUE
+  })
   
   
   observeEvent(app_values$return_to_input, {
