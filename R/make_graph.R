@@ -88,8 +88,15 @@ make_graph <- function(data_to_plot, variable_group, variable_info, current_data
       }
     } else if (variable_info$variable_type == "quanti_points"){
       if(index_type == "activity") {
+        library(scales)
+        expm1_trans <-  function() scales::trans_new("expm1", "expm1", "log1p")
+    
         graph <- graph + 
-          geom_smooth()
+          geom_smooth() +
+          scale_y_continuous(trans=scales::log1p_trans()) +
+          coord_trans(y=expm1_trans())
+          # scale_y_log10() +
+          # coord_trans(ytrans="pow10")
       } else {
         graph <- graph + 
           geom_point() +
