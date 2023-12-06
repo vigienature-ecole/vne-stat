@@ -87,7 +87,7 @@ mod_map_birds_ui <- function(id) {
       sliderInput(ns("min_obs"),
                   "Nombre minimum d'observation pour représentation",
                   min = 0,
-                  max = 300,
+                  max = 3000,
                   value = 5)
     ),
     column( width = 8,
@@ -139,7 +139,7 @@ mod_map_birds_server <- function(id, parent_session){
       
       # change month from num to letters
       if(input$period == "mois"){
-        map_to_plot$mois <- label_month(map_to_plot$mois)
+        map_to_plot$mois <- label_month(map_to_plot$mois, numbered_school_year = TRUE)
       }
       
       # define theme for map (legend, remove axis, colors)
