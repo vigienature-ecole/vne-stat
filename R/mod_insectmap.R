@@ -98,7 +98,7 @@ mod_map_insects_server <- function(id, parent_session){
       
       # change month from num to letters
       if(input$period == "mois"){
-        map_to_plot$mois <- label_mounth(map_to_plot$mois)
+        map_to_plot$mois <- label_month(map_to_plot$mois)
       }
       
       # define theme for map (legend, remove axis, colors)
