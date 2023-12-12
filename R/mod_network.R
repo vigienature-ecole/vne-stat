@@ -227,6 +227,7 @@ mod_network_server <- function(id, parent_session){
           selected_insects <- unique(interaction_limited[[taxo_level]])
           image_list <- insect_images[[taxo_level]]
           selected_insect_images <- image_list[image_list[[taxo_level]] %in% selected_insects, ]
+          selected_insect_images <- selected_insect_images[order(selected_insect_images[[taxo_level]])]
           
           lapply(seq_along(1:nrow(selected_insect_images)), function(a) {
             box(title = selected_insect_images[[taxo_level]][a], 
@@ -252,6 +253,7 @@ mod_network_server <- function(id, parent_session){
           selected_plants <- unique(interaction_limited[[taxo_level]])
           image_list <- plant_images[[taxo_level]]
           selected_plant_images <- image_list[image_list[[taxo_level]] %in% selected_plants, ]
+          selected_plant_images <- selected_plant_images[order(selected_plant_images[[taxo_level]])]
           
           lapply(seq_along(1:nrow(selected_plant_images)), function(a) {
             box(title = selected_plant_images[[taxo_level]][a], 
