@@ -30,7 +30,7 @@ function(input, output, session) {
   mod_network_server("reseaux", parent_session = session)
   mod_network_biolit_server("reseaux_biolit", parent_session = session)
   mod_map_birds_server("map_birds", parent_session = session)
-  mod_map_insects_server("map_insects", parent_session = session)
+  # mod_map_insects_server("map_insects", parent_session = session)
   
   # hide elements when app starts
   hide("view_raw_data")
@@ -347,9 +347,9 @@ function(input, output, session) {
   })
   
   
-  observeEvent(input$new_analysis_top_map_insects, {
-    app_values$return_to_input <- TRUE
-  })
+  # observeEvent(input$new_analysis_top_map_insects, {
+  #   app_values$return_to_input <- TRUE
+  # })
   
   observeEvent(input$new_analysis_top_network_biolit, {
     app_values$return_to_input <- TRUE

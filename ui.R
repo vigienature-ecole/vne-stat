@@ -136,13 +136,13 @@ fluidPage(
                           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
              HTML("<br><br>"),
              mod_map_birds_ui("map_birds")
-    ),
-    tabPanel("Carte insectes", value = "map_insects",
-             actionButton("new_analysis_top_map_insects", "Lancer une nouvelle analyse",
-                          style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
-             HTML("<br><br>"),
-             mod_map_insects_ui("map_insects")
-    )
+    )#,
+    # tabPanel("Carte insectes", value = "map_insects",
+    #          actionButton("new_analysis_top_map_insects", "Lancer une nouvelle analyse",
+    #                       style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
+    #          HTML("<br><br>"),
+    #          mod_map_insects_ui("map_insects")
+    # )
   )
 )
 
