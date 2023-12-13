@@ -15,7 +15,7 @@ ids,type,with_variable,oiseaux,vdt,escargots,spipoll,sauvages,biolit,alamer,chir
 14,data,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,NA,NA,NA,sauvages,Sauvages de ma rue,Ce jeu de données contient des données sur les plantes et leur environnement collectées avec le protocole Sauvage de ma rue.
 15,variable,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,quanti_line,mois,FALSE,Mois,Mois,
 16,visualisation,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,NA,NA,NA,graphique,Réaliser un graphique,Cette option permet de réaliser un graphique à partir de vos calculs.
-17,variable,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,quanti_line,name,FALSE,Annee,Année,
+17,variable,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,quanti_line,name,FALSE,Annee,Année,
 21,visualisation_old,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,NA,NA,NA,carte,Réaliser une carte,Cette option permet de placer vos données sur une carte. 
 30,variable,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,quali,name,FALSE,Humidite_sol_lors_observation,Humidité du sol,
 31,variable,FALSE,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,FALSE,FALSE,quanti_points,name,FALSE,Longitude,Longitude,
