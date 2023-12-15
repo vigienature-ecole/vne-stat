@@ -76,7 +76,6 @@ ids,type,with_variable,oiseaux,vdt,escargots,spipoll,sauvages,biolit,alamer,chir
 ,variable,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,quali,name,FALSE,Pollinisation_plante,Type de pollinisation de la plante,
 ,operation,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,NA,name,NA,map_birds,Étudier la répartition des espèces,
 78,data,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,NA,name,NA,alamer,Algues de la laisse de mer,Ce jeu de données contient des données sur les algues de la laisse de mer et leur environnement collectées avec le protocole ALAMER. 
-,data,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,NA,name,NA,chiro,Vigie-Chiro,
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,quanti_points,name,NA,Temperature_debut,Température (début),
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,quanti_points,name,NA,Temperature_fin,Température (fin),
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,quali,name,NA,Couverture_nuageuse,Couverture nuageuse,
