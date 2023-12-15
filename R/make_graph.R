@@ -74,7 +74,7 @@ make_graph <- function(data_to_plot, variable_group, variable_info, current_data
     data_to_plot$error_moins[data_to_plot$error_moins < 0] <- 0
     
     error_bars <- geom_errorbar(data = data_to_plot, aes(ymax = error_plus, ymin = error_moins),
-                                width = .2, linewidth = 1.2)
+                                linewidth = 1.2)
   }
   
   ## Choix du type de graphique ----

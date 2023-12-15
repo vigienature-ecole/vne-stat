@@ -15,7 +15,7 @@ mod_network_ui <- function(id) {
       ),
       style='min-height:500px; border: 10px solid white; padding: 10px; border-radius: 20px; background: #DDEDDD', width = 4, align="center",
       h3("Paramètres de la représentation du réseau"),
-      selectInput(ns("taxon_depth_insect"), "Niveau taxonomique des insectes et araignées", choices = setNames(c("Ordre", "Espece"), c("Grands groupes d'insectes et araignées", "Espèces d'insectes et araignées"))),
+      selectInput(ns("taxon_depth_insect"), "Niveau taxonomique des insectes et araignées", choices = setNames(c("Ordre", "Espece"), c("Grands groupes d'insectes et araignées", "Espèces et groupes d'insectes et araignées"))),
       selectInput(ns("taxon_depth_plant"), "Niveau taxonomique des plantes", choices = setNames(c("Famille_plante", "Plante"), c("Grands groupes de plantes (Familles)", "Espèces de plantes"))),
       selectizeInput(ns("taxon_select_insect"), "Sélectionner des insectes et araignées", choices = "", multiple = TRUE, options = NULL),
       helpText("Si laissé vide, alors tous les insectes et/ou araignées sont affichés (selon le nombre d'intéraction minimum), cela permet de faire des comparaisons précises ou de regarder des réseaux plus simples"),
@@ -219,6 +219,7 @@ mod_network_server <- function(id, parent_session){
     observeEvent(input$view_network, {
       output$boxes_insects <- renderUI({
         if(!is.null(mod_values$current_filtered_taxon_network)){
+ 
           interaction_limited <- filtered_network_max_interactions()
           insect_images <- mod_values$insect_images
           taxo_level <- input$taxon_depth_insect
@@ -227,7 +228,7 @@ mod_network_server <- function(id, parent_session){
           selected_insects <- unique(interaction_limited[[taxo_level]])
           image_list <- insect_images[[taxo_level]]
           selected_insect_images <- image_list[image_list[[taxo_level]] %in% selected_insects, ]
-          selected_insect_images <- selected_insect_images[order(selected_insect_images[[taxo_level]])]
+          selected_insect_images <- selected_insect_images[order(selected_insect_images[[taxo_level]]), ]
           
           lapply(seq_along(1:nrow(selected_insect_images)), function(a) {
             box(title = selected_insect_images[[taxo_level]][a], 
@@ -236,7 +237,8 @@ mod_network_server <- function(id, parent_session){
                 solidHeader = TRUE, 
                 tags$img(src = selected_insect_images$image_url[a]
                          , width = "100%"
-                )
+                ),
+                p(selected_insect_images$Pseudo[a])
             )
           })
         }
@@ -253,7 +255,7 @@ mod_network_server <- function(id, parent_session){
           selected_plants <- unique(interaction_limited[[taxo_level]])
           image_list <- plant_images[[taxo_level]]
           selected_plant_images <- image_list[image_list[[taxo_level]] %in% selected_plants, ]
-          selected_plant_images <- selected_plant_images[order(selected_plant_images[[taxo_level]])]
+          selected_plant_images <- selected_plant_images[order(selected_plant_images[[taxo_level]]), ]
           
           lapply(seq_along(1:nrow(selected_plant_images)), function(a) {
             box(title = selected_plant_images[[taxo_level]][a], 
@@ -270,17 +272,17 @@ mod_network_server <- function(id, parent_session){
       
       output$plant_title <- renderText({
         if (input$taxon_depth_plant == "Famille_plante"){
-          "Grand groupes (Familles) de plante"
+          "Grands groupes (Familles) de plante"
         } else {
-          "Espèces de plante"
+          "Espèces de plantes"
         }
       })
       
       output$insect_title <- renderText({      
         if (input$taxon_depth_insect == "Ordre"){
-          "Ordre d'insectes et araignées"
+          "Grands groupes d'insectes et araignées"
         } else {
-          "Espèces et groupe d'insectes et araignées"
+          "Espèces et groupes d'insectes et araignées"
         }
       })
       
