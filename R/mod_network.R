@@ -64,6 +64,7 @@ mod_network_server <- function(id, parent_session){
     )
     cat("    ok\n")
     
+    # if any change in taxon depth change all the selects and update network
     observeEvent(input$taxon_depth_insect, {
       cat("change insect taxo\n")
       mod_values$taxon_change = mod_values$taxon_change + 1
