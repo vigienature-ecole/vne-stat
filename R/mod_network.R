@@ -18,17 +18,17 @@ mod_network_ui <- function(id) {
       selectInput(ns("taxon_depth_insect"), "Niveau taxonomique des insectes et araignées", choices = setNames(c("Ordre", "Espece"), c("Grands groupes d'insectes et araignées", "Espèces et groupes d'insectes et araignées"))),
       selectInput(ns("taxon_depth_plant"), "Niveau taxonomique des plantes", choices = setNames(c("Famille_plante", "Plante"), c("Grands groupes de plantes (Familles)", "Espèces de plantes"))),
       selectizeInput(ns("taxon_select_insect"), "Sélectionner des insectes et araignées", choices = "", multiple = TRUE, options = NULL),
-      helpText("Si laissé vide, alors tous les insectes et/ou araignées sont affichés (selon le nombre d'intéraction minimum), cela permet de faire des comparaisons précises ou de regarder des réseaux plus simples"),
+      helpText("Si laissé vide, alors tous les insectes et/ou araignées sont affichés (selon le nombre d'interactions minimum), cela permet de faire des comparaisons précises ou de regarder des réseaux plus simples"),
       selectizeInput(ns("taxon_select_plant"), "Sélectionner des plantes", choices = "", multiple = TRUE, options = NULL),
-      helpText("Si laissé vide, alors toutes les plantes sont affichées (selon le nombre d'intéraction minimum), cela permet de faire des comparaisons précises ou de regarder des réseaux plus simples"),
+      helpText("Si laissé vide, alors toutes les plantes sont affichées (selon le nombre d'interaction minimum), cela permet de faire des comparaisons précises ou de regarder des réseaux plus simples"),
       sliderInput(ns("max_interactions"),
                   "Nombre d'interactions représentées",
                   min = 2,
                   max = 3000,
                   value = 50),
-      helpText("Ce champ permet de choisir le nombre d'intéractions représentées. Cela permet de réduire la complexité du réseau mais biaise les données pour les organismes les plus abondants. Vous pouvez utiliser les filtres par espèces pour regarder les organismes plus rares."),
-      checkboxInput(ns("normalise_interactions_plant"), label = "Normaliser les intéractions selon les plantes", value = TRUE),
-      helpText("Si l'on utilise cette option, le nombre d'intéractions est divisé par le nombre total d'intéractions observées sur cette plante. Attention certaines plantes (comme le Lierre grimpant ou la carotte sauvage sont très représentés tandis que d'autres n'ont été vues qu'une seule fois) ce qui peut biaiser les résultats.")
+      helpText("Ce champ permet de choisir le nombre d'interactions représentées. Cela permet de réduire la complexité du réseau mais biaise les données pour les organismes les plus abondants. Vous pouvez utiliser les filtres par espèces pour regarder les organismes plus rares."),
+      checkboxInput(ns("normalise_interactions_plant"), label = "Normaliser les interactions selon les plantes", value = TRUE),
+      helpText("Si l'on utilise cette option, le nombre d'interactions est divisé par le nombre total d'interactions observées sur cette plante. Attention certaines plantes (comme le Lierre grimpant ou la carotte sauvage sont très représentés tandis que d'autres n'ont été vues qu'une seule fois) ce qui peut biaiser les résultats.")
       
     ),
     column( width = 8,
