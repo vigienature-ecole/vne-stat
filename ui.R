@@ -96,12 +96,17 @@ fluidPage(
              HTML("<br><br>"),
              bsCollapse(id = "results",
                         bsCollapsePanel(
-                          title = "Données importées", DT::dataTableOutput("data_output")
+                          title = "Données importées", tags$div(style = 'overflow-x: scroll',
+                                                                DT::dataTableOutput("data_output")
+                          )
                         ),
                         bsCollapsePanel(
-                          title = "Manipulation", DT::dataTableOutput("manip_output"),
+                          title = "Manipulation", 
+                          tags$div(style = 'overflow-x: scroll',
+                          DT::dataTableOutput("manip_output"),
                           htmlOutput("error_manip") %>% 
                             tagAppendAttributes(style = 'color:green;font-weight: bolder;')
+                          )
                         ),
                         bsCollapsePanel(
                           title = "Visualisation", 
