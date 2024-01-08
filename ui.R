@@ -120,7 +120,11 @@ fluidPage(
                             tagAppendAttributes(style = 'color:green;font-weight: bolder;'),
                           htmlOutput("help_vis_out") %>% 
                             tagAppendAttributes(style = 'color:green;font-weight: bolder;'),
-                          p("la méthode utilisée pour produire les graphiques est une méthode d’exploration des données brutes (data visualisation), et ne peut être en aucun cas utilisée pour directement publier des résultats. En effet, pour répondre de façon scientifique à des questions en écologie, il faudrait effectuer certaines corrections statistiques pour prendre en compte certains biais, notamment liés à l’échantillonnage. Il faut donc être très prudent dans l’interprétation de ces résultats.")
+                          br(),
+                          br(),
+                          br(),
+                          br(),
+                          helpText("la méthode utilisée pour produire les graphiques est une méthode d’exploration des données brutes (data visualisation), et ne peut être en aucun cas utilisée pour directement publier des résultats. En effet, pour répondre de façon scientifique à des questions en écologie, il faudrait effectuer certaines corrections statistiques pour prendre en compte certains biais, notamment liés à l’échantillonnage. Il faut donc être très prudent dans l’interprétation de ces résultats.")
                           )
                         )
              ),
