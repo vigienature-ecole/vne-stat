@@ -91,7 +91,7 @@ fluidPage(
     # Show a plot of the generated distribution
     tabPanel("Résultats", value = "results",
              HTML("<br>"),
-             actionButton("new_analysis_top", "Lancer une nouvelle analyse", 
+             actionButton("new_analysis_top", "Retour à la page de contrôle", 
                           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
              HTML("<br><br>"),
              bsCollapse(id = "results",
@@ -109,41 +109,46 @@ fluidPage(
                           )
                         ),
                         bsCollapsePanel(
+                          
                           title = "Visualisation", 
+     
+                          tags$div(style = 'overflow-y: scroll; height: 70vh',
                           htmlOutput("title_graph") |>
                             tagAppendAttributes(style = 'font-weight: bolder;text-align: center;font-size: x-large;'),
                           plotOutput("visu_graph_output"),
                           htmlOutput("error_vis") %>% 
                             tagAppendAttributes(style = 'color:green;font-weight: bolder;'),
                           htmlOutput("help_vis_out") %>% 
-                            tagAppendAttributes(style = 'color:green;font-weight: bolder;')
+                            tagAppendAttributes(style = 'color:green;font-weight: bolder;'),
+                          p("la méthode utilisée pour produire les graphiques est une méthode d’exploration des données brutes (data visualisation), et ne peut être en aucun cas utilisée pour directement publier des résultats. En effet, pour répondre de façon scientifique à des questions en écologie, il faudrait effectuer certaines corrections statistiques pour prendre en compte certains biais, notamment liés à l’échantillonnage. Il faut donc être très prudent dans l’interprétation de ces résultats.")
+                          )
                         )
              ),
              HTML("<br>"),
-             actionButton("new_analysis_bottom", "Lancer une nouvelle analyse", 
+             actionButton("new_analysis_bottom", "Retour à la page de contrôle", 
                           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
              HTML("<br><br>")
     ),
     tabPanel("Réseaux", value = "reseau",
-             actionButton("new_analysis_top_network", "Lancer une nouvelle analyse",
+             actionButton("new_analysis_top_network", "Retour à la page de contrôle",
                           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
              HTML("<br><br>"),
              mod_network_ui("reseaux")
              ),
     tabPanel("Réseaux biolit", value = "reseau_biolit",
-             actionButton("new_analysis_top_network_biolit", "Lancer une nouvelle analyse",
+             actionButton("new_analysis_top_network_biolit", "Retour à la page de contrôle",
                           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
              HTML("<br><br>"),
              mod_network_biolit_ui("reseaux_biolit")
     ),
     tabPanel("Carte oiseaux", value = "map_birds",
-             actionButton("new_analysis_top_map_birds", "Lancer une nouvelle analyse",
+             actionButton("new_analysis_top_map_birds", "Retour à la page de contrôle",
                           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
              HTML("<br><br>"),
              mod_map_birds_ui("map_birds")
     )#,
     # tabPanel("Carte insectes", value = "map_insects",
-    #          actionButton("new_analysis_top_map_insects", "Lancer une nouvelle analyse",
+    #          actionButton("new_analysis_top_map_insects", "Retour à la page de contrôle",
     #                       style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
     #          HTML("<br><br>"),
     #          mod_map_insects_ui("map_insects")
