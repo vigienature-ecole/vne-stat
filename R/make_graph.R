@@ -140,7 +140,8 @@ make_graph <- function(data_to_plot, variable_group, variable_info, current_data
                    axis.title.x = element_text(vjust = -2),
                    axis.title.y = element_text(vjust = 2.3),
                    plot.margin=unit(c(1,1,1.5,1.2),"cm"),
-                   legend.position = "none")
+                   legend.position = "none",
+                   plot.caption = element_text(size = 16))
   
   if(variable_group == "Choisir une variable"){
     graph <- graph + ggplot2::theme(strip.text.x = element_blank(),
@@ -153,6 +154,10 @@ make_graph <- function(data_to_plot, variable_group, variable_info, current_data
       graph <- graph + theme(axis.text.x = element_text(angle = 40, vjust = 1, hjust=1))
     }
   }
+  
+  # add disclaimer
+  
+  graph <- graph + ggplot2::labs(caption = paste("\nCe graphique est issu d'une étude exploratoire et ne peut être en aucun cas utilisée pour directement publier des résultats", collapse = "\n"))
   
   
   return(graph)
