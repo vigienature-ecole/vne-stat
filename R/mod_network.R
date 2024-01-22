@@ -162,14 +162,20 @@ mod_network_server <- function(id, parent_session){
       
       interaction_matrix <- interaction_limited %>%
         tidyr::pivot_wider(names_from = 2, values_from = interaction_value, values_fill = 0)
-      
+      plant_names <- colnames(interaction_matrix)
       interaction_matrix <- data.frame(interaction_matrix)
-      row.names(interaction_matrix) <- interaction_matrix[, input$taxon_depth_insect]
+      names <- interaction_matrix[, input$taxon_depth_insect]
       interaction_matrix <- interaction_matrix[, -1]
+    # make matrix if only 1 plant (defaut is vector)
+      if (ncol(interaction_matrix) > 2){
+        row.names(interaction_matrix) <- names
+      } else {
+        interaction_matrix <- matrix(interaction_matrix, ncol = 1)
+        row.names(interaction_matrix) <- names
+        colnames(interaction_matrix) <- plant_names[2]
+      }
       
       mod_values$interaction_matrix <- as.matrix(interaction_matrix)
-      
-      
     })
     
     output$interaction_plot <- renderPlot({
@@ -205,6 +211,8 @@ mod_network_server <- function(id, parent_session){
         #              BarSize = 20,
         #              MinWidth = 5,
         #              Pad=5)
+        
+        
         bipartite::plotweb(interaction_matrix,
                            text.rot = 90,
                            adj.high = 0,
@@ -220,7 +228,7 @@ mod_network_server <- function(id, parent_session){
     observeEvent(input$view_network, {
       output$boxes_insects <- renderUI({
         if(!is.null(mod_values$current_filtered_taxon_network)){
- 
+          
           interaction_limited <- filtered_network_max_interactions()
           insect_images <- mod_values$insect_images
           taxo_level <- input$taxon_depth_insect
