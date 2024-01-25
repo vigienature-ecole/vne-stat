@@ -100,14 +100,12 @@ mod_network_server <- function(id, parent_session){
     observeEvent(mod_values$filter_change, {
       cat("change filter detected \n")
       current_filtered_taxon_network <- mod_values$current_full_network
-      
       if(!is.null(input$taxon_select_plant)){
         if (length(input$taxon_select_plant) > 0) {
           cat("effective filtering plant\n")
           current_filtered_taxon_network <- subset(current_filtered_taxon_network, dplyr::pull(current_filtered_taxon_network[, input$taxon_depth_plant]) %in% input$taxon_select_plant)
         }
       }
-      
       if(!is.null(input$taxon_select_insect)){
         if (length(input$taxon_select_insect) > 0) {
           cat("effective filtering insect\n")
@@ -139,7 +137,6 @@ mod_network_server <- function(id, parent_session){
       current_filtered_taxon_network <- filtered_network_max_interactions()
       
       
-      
       if (input$normalise_interactions_plant){
         
         # calculate total interaction (for normalisation)
@@ -167,7 +164,7 @@ mod_network_server <- function(id, parent_session){
       names <- interaction_matrix[, input$taxon_depth_insect]
       interaction_matrix <- interaction_matrix[, -1]
     # make matrix if only 1 plant (defaut is vector)
-      if (ncol(interaction_matrix) > 2){
+      if (!is.vector(interaction_matrix)){
         row.names(interaction_matrix) <- names
       } else {
         interaction_matrix <- matrix(interaction_matrix, ncol = 1)
@@ -288,6 +285,7 @@ mod_network_server <- function(id, parent_session){
       })
       
       output$insect_title <- renderText({      
+        
         if (input$taxon_depth_insect == "Ordre"){
           "Grands groupes d'insectes et araignées"
         } else {
