@@ -20,13 +20,17 @@ calculate_indices <- function(data, index, variable_group){
     # calcul abondance par observation
     biodiversity_index = data[ , .(index = sum(Nombre_individus, na.rm = TRUE)),
                                by = group_variable]
+    if("Placette" %in% colnames(data)) {
+      biodiversity_index$index <- biodiversity_index$index/3
+    }
+    
   } else {
     # attention probalement pas lichen go proof !!!!
-    if("Numero_quadrat" %in% colnames(data) | "placette" %in% colnames(data)){
+    if("Numero_quadrat" %in% colnames(data) | "Placette" %in% colnames(data)){
       if("Numero_quadrat" %in% colnames(data)){
         group <- c(group_variable, "Numero_quadrat")
       } else {
-        group <- c(group_variable, "placette")
+        group <- c(group_variable, "Placette")
       }
       biodiversity_index_subplot = data[ , .(index = length(Nombre_individus[Nombre_individus > 0])),
                                          by = group]

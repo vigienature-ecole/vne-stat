@@ -157,7 +157,7 @@ make_graph <- function(data_to_plot, variable_group, variable_info, current_data
   
   # add disclaimer
   
-  graph <- graph + ggplot2::labs(caption = paste("\nCe graphique est issu d'une étude exploratoire et ne peut être en aucun cas utilisée pour directement publier des résultats", collapse = "\n"))
+  graph <- graph + ggplot2::labs(caption = paste("\nCe graphique est issu d'une étude exploratoire et ne peut être en aucun cas utilisé pour directement publier des résultats", collapse = "\n"))
   
   
   return(graph)
