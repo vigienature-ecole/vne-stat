@@ -88,6 +88,7 @@ ids,type,with_variable,oiseaux,vdt,escargots,spipoll,sauvages,biolit,alamer,chir
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,quanti_points,name,NA,Proportion_eau,Proportion surface en eau,
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,quanti_points,name,NA,Altitude,Altitude,
 13,operation,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,NA,NA,NA,activity,Nombre moyen de contacts,Cette option additionne le nombre de contact pour chaque observation puis réalise une moyenne.
-,operation,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,NA,name,NA,map_insects,Étudier la répartition des espèces,
+,operation,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,NA,NA,NA,map_insects,Étudier la répartition des espèces,
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,quali,name,FALSE,Saison,Saison,
-,data,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,NA,name,NA,chiro,Vigie-Chiro,Ce jeu de données contient des données sur les chauves-sourisr et leur environnement collectées avec le protocole Vigie-Chiro. 
+,data,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,NA,NA,NA,chiro,Vigie-Chiro,Ce jeu de données contient des données sur les chauves-sourisr et leur environnement collectées avec le protocole Vigie-Chiro. 
+,operation,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,NA,NA,NA,sauvages_habitats,Étudier les habitats des plantes,

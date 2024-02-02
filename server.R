@@ -21,6 +21,7 @@ function(input, output, session) {
   mod_network_server("reseaux", parent_session = session)
   mod_network_biolit_server("reseaux_biolit", parent_session = session)
   mod_map_birds_server("map_birds", parent_session = session)
+  mod_habitats_sauvages_server("habitats_sauvages", parent_session = session, data_values = data_values)
   # mod_map_insects_server("map_insects", parent_session = session)
   
   # hide elements when app starts
@@ -186,6 +187,9 @@ function(input, output, session) {
                           selected = "reseau")
       }
      
+    } else if(input$manipulate == "sauvages_habitats") {
+      updateTabsetPanel(session, "vne_stats",
+                        selected = "sauvages_habitats")
     } else if(input$manipulate == "map_birds") {
       updateTabsetPanel(session, "vne_stats",
                         selected = "map_birds")
@@ -328,6 +332,10 @@ function(input, output, session) {
   observeEvent(input$new_analysis_top, {
     app_values$return_to_input <- TRUE
   })
+  observeEvent(input$new_analysis_top_sauvages_habitats, {
+    app_values$return_to_input <- TRUE
+  })
+  
   
   observeEvent(input$new_analysis_top_network, {
     app_values$return_to_input <- TRUE
