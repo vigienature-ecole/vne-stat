@@ -116,14 +116,14 @@ mod_habitats_sauvages_server <- function(id, parent_session, data_values){
           ggplot2::labs(y = "Nombre d'observations \nde l'habitat") +
           theme
           
-          
+        plot1
         
-        ggpubr::ggarrange(plot1, plot2, nrow = 3)
+        
         
       } else {
         NULL
       }
-    },height = 1300)
+    },height = 600)
     
     
     
