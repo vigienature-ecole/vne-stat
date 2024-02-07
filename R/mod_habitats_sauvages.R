@@ -68,19 +68,29 @@ mod_habitats_sauvages_server <- function(id, parent_session, data_values){
         
         focal_species <- input$espece
         
-        longer <- data_values$sauvages[Espece == focal_species, ..columns_to_keep] %>%
+        longer <- data_values$sauvages[, ..columns_to_keep] %>%
           tidyr::pivot_longer(cols = 2:8, names_to = "Habitat") 
         
         
+        
+        
         resultats_habitats <- longer|>
+          dplyr::group_by(Habitat)|>
+          dplyr::summarise(Nombre_observation_hab = sum(value))
+        
+        resultats_habitats_species <- longer |>
+          dplyr::filter(Espece == focal_species) |>
           dplyr::group_by(Espece, Habitat)|>
           dplyr::summarise(Nombre_observation = sum(value))
         
-        ggplot2::ggplot(resultats_habitats, ggplot2::aes( x = Habitat, y = Nombre_observation)) +
-          ggplot2::geom_col() +
-          ggplot2::labs(y = "Nombre d'observations de l'espèce") +
-          ggplot2::theme_bw() +
-          ggplot2::theme(axis.text=element_text(size = 20),
+        resultats_globaux <- dplyr::inner_join(resultats_habitats_species, resultats_habitats, by = "Habitat")
+        
+        resultats_globaux$Proportion_observation_corrige <- resultats_globaux$Nombre_observation / resultats_globaux$Nombre_observation_hab
+        
+        
+        theme =   ggplot2::theme_bw() +
+          ggplot2::theme(axis.text.y=element_text(size = 20),
+                         axis.text.x=element_text(size = 20, angle = 30, hjust = 1),
                          axis.title=element_text(size = 24),
                          strip.text.x = element_text(size = 20),
                          axis.title.x = element_text(vjust = -2),
@@ -89,10 +99,31 @@ mod_habitats_sauvages_server <- function(id, parent_session, data_values){
                          legend.position = "none",
                          plot.caption = element_text(size = 16))
         
+        
+        plot1 <- ggplot2::ggplot(resultats_globaux, ggplot2::aes( x = Habitat, y = Proportion_observation_corrige)) +
+          ggplot2::geom_col() +
+          ggplot2::labs(y = "Proportion d'observations de\n l'espèce dans l'habitat") +
+          theme
+        
+        plot3 <- ggplot2::ggplot(resultats_globaux, ggplot2::aes( x = Habitat, y = Nombre_observation)) +
+          ggplot2::geom_col() +
+          ggplot2::labs(y = "Nombre d'observations de\n l'espèce dans l'habitat") +
+          theme
+        
+        
+        plot2 <- ggplot2::ggplot(resultats_habitats, ggplot2::aes( x = Habitat, y = Nombre_observation_hab)) +
+          ggplot2::geom_col() +
+          ggplot2::labs(y = "Nombre d'observations \nde l'habitat") +
+          theme
+          
+          
+        
+        ggpubr::ggarrange(plot1, plot2, nrow = 3)
+        
       } else {
         NULL
       }
-    })
+    },height = 1300)
     
     
     

@@ -100,7 +100,7 @@ function(input, output, session) {
     }
     
     
-    if(input$manipulate %in% c("Choisir une opération","reseau", "map_birds", "maps_insects")){ 
+    if(input$manipulate %in% c("Choisir une opération","reseau", "map_birds", "maps_insects", "sauvages_habitats")){ 
       hide("view_res_manip")
     } else {
       show("view_res_manip")
