@@ -5,9 +5,9 @@ if (run){
   # read and give stats on VNE
   files <- list.files("data/data_users_temp/", pattern = "5a9")
   if(length(files ) > 0){
-    list_all_files <- paste0("data/data_users_temp/",) 
+    list_all_files <- paste0("data/data_users_temp/", files) 
     data_all <- list_all_files |>
-      lapply(readr::read_csv) |>                                         # Combine data sets into one data set 
+      lapply(function(x) readr::read_csv(x, col_types="ccct")) |>                                         # Combine data sets into one data set 
       dplyr::bind_rows()
     
     if ("user_data.csv" %in% list.files("data")){
