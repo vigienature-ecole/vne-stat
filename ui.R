@@ -11,7 +11,7 @@ library(shiny)
 library(shinyjs) # to hide / show 
 library(shinyBS) # for the collapse part 
 library(magrittr)
-library(shinyWidgets)
+#library(shinyWidgets)
 
 
 #import module and fonctions
@@ -20,7 +20,6 @@ lapply(file.path("R", dir("R")), source)
 # Define UI for application that draws a histogram
 fluidPage(
   useShinyjs(),
-  useShinydashboard(),
   # add custom css
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
@@ -32,13 +31,16 @@ fluidPage(
     )
   ),
   navbarPage(
+    # remove the nav bar (navigation will be only working with buttons)
     tags$head(tags$style(type = 'text/css','.navbar{display:none;}')),
     id = "vne_stats",
+    # Login page ----
     tabPanel(
       title = "Connexion à Vigie-Nature École Stats",
       value = "login",
       mod_login_ui("login")
     ),
+    # Control page ----
     tabPanel(
       title = "Lancer une analyse de données",  
       value = "input",
@@ -88,7 +90,7 @@ fluidPage(
       )
     )
     ,
-    # Show a plot of the generated distribution
+    # Classical result page ----
     tabPanel("Résultats", value = "results",
              HTML("<br>"),
              actionButton("new_analysis_top", "Retour à la page de contrôle", 
@@ -133,24 +135,28 @@ fluidPage(
                           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
              HTML("<br><br>")
     ),
+    # Insect network page ----
     tabPanel("Réseaux", value = "reseau",
              actionButton("new_analysis_top_network", "Retour à la page de contrôle",
                           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
              HTML("<br><br>"),
              mod_network_ui("reseaux")
              ),
+    # Biolit network page ----
     tabPanel("Réseaux biolit", value = "reseau_biolit",
              actionButton("new_analysis_top_network_biolit", "Retour à la page de contrôle",
                           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
              HTML("<br><br>"),
              mod_network_biolit_ui("reseaux_biolit")
     ),
+    # Sauvage habitats result page ----
     tabPanel("Habitats sauvages", value = "sauvages_habitats",
              actionButton("new_analysis_top_sauvages_habitats", "Retour à la page de contrôle",
                           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
              HTML("<br><br>"),
              mod_habitats_sauvages_ui("habitats_sauvages")
     ),
+    # Birdmap page ----
     tabPanel("Carte oiseaux", value = "map_birds",
              actionButton("new_analysis_top_map_birds", "Retour à la page de contrôle",
                           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),

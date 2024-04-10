@@ -50,6 +50,7 @@ mod_login_server <- function(id, parent_session){
         )
       )
       
+      # if no error, write a file with the information 
       if(!error){
         cat("login to app\n")
         # store login info into file
