@@ -92,3 +92,4 @@ ids,type,with_variable,oiseaux,vdt,escargots,spipoll,sauvages,biolit,alamer,chir
 ,variable,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,quali,name,FALSE,Saison,Saison,
 ,data,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,NA,NA,NA,chiro,Vigie-Chiro,Ce jeu de données contient des données sur les chauves-sourisr et leur environnement collectées avec le protocole Vigie-Chiro. 
 ,operation,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,NA,NA,NA,sauvages_habitats,Étudier les habitats des plantes,
+,variable,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,quali,name,FALSE,Naturalite,Naturalité,
