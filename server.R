@@ -22,6 +22,7 @@ function(input, output, session) {
   mod_network_biolit_server("reseaux_biolit", parent_session = session)
   mod_map_birds_server("map_birds", parent_session = session)
   mod_habitats_sauvages_server("habitats_sauvages", parent_session = session, data_values = data_values)
+  mod_study_plant_spipoll_server("study_plant_spipoll", parent_session = session, data_values = data_values)
   # mod_map_insects_server("map_insects", parent_session = session)
   
   # hide elements when app starts
@@ -107,7 +108,7 @@ function(input, output, session) {
     }
     
     if(input$manipulate %in% c("diversite", "nombre_obs", "abondance", "activity")){ 
-    
+      
       show("variable_group")
       current_dataset_name = input$import
       variable_information <- app_config[app_config$type == "variable" & app_config[[current_dataset_name]]]
@@ -186,13 +187,17 @@ function(input, output, session) {
         updateTabsetPanel(session, "vne_stats",
                           selected = "reseau")
       }
-     
+      
     } else if(input$manipulate == "sauvages_habitats") {
       updateTabsetPanel(session, "vne_stats",
                         selected = "sauvages_habitats")
     } else if(input$manipulate == "map_birds") {
       updateTabsetPanel(session, "vne_stats",
                         selected = "map_birds")
+    } else if(input$manipulate == "analyse_plant") {
+      updateTabsetPanel(session, "vne_stats",
+                        selected = "study_plant_spipoll")
+      
     } else if(input$manipulate == "map_insects") {
       updateTabsetPanel(session, "vne_stats",
                         selected = "map_insects")
@@ -215,7 +220,7 @@ function(input, output, session) {
       app_values$current_dataset <- data_values[[input$import]]
       # remove NA from Nombre_individus
       
-
+      
       if(input$import == "escargots") {
         app_values$current_dataset <- app_values$current_dataset[!is.na(Nombre_individus) ]
       }

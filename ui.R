@@ -162,13 +162,14 @@ fluidPage(
                           style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
              HTML("<br><br>"),
              mod_map_birds_ui("map_birds")
-    )#,
-    # tabPanel("Carte insectes", value = "map_insects",
-    #          actionButton("new_analysis_top_map_insects", "Retour à la page de contrôle",
-    #                       style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
-    #          HTML("<br><br>"),
-    #          mod_map_insects_ui("map_insects")
-    # )
+    ),
+    # study_plant_spipoll page ----
+    tabPanel("Carte insectes", value = "study_plant_spipoll",
+             actionButton("new_analysis_top_study_plant_spipoll", "Retour à la page de contrôle",
+                          style="color: #fff; background-color: #62CC33; border-color: #62CC3300; font-size:120%"),
+             HTML("<br><br>"),
+             mod_study_plant_spipoll_ui("study_plant_spipoll")
+    )
   )
 )
 

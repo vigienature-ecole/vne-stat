@@ -131,8 +131,8 @@ make_graph <- function(data_to_plot, variable_group, variable_info, current_data
   #Ajouter un theme
   # add theme
   graph <- graph +
-    expand_limits(y = 0) +
-    labs(y = y_label, x = x_label) +
+    ggplot2::expand_limits(y = 0) +
+    ggplot2::labs(y = y_label, x = x_label) +
     ggplot2::theme_bw() +
     ggplot2::theme(axis.text=element_text(size = label_size),
                    axis.title=element_text(size = 24),
