@@ -3,7 +3,7 @@ library(shiny)
 library(shinyjs)
 
 # load the app_config file (datasets, operation and variable to be used within the application)
-app_config = data.table::fread("data/app_config.csv")
+app_config = data.table::fread("data/app_config.csv", encoding = "UTF-8")
 app_config <- app_config[order(app_config$label), ]
 
 # get the protocol names and load them
