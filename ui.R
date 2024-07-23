@@ -15,7 +15,7 @@ library(magrittr)
 
 
 #import module and fonctions
-lapply(file.path("R", dir("R")), source)
+lapply(file.path("R", dir("R")), function(x) source(x,encoding = "UTF-8"))
 
 # Define UI for application that draws a histogram
 fluidPage(
